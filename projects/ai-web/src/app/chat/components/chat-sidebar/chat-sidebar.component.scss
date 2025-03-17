@@ -1,0 +1,34 @@
+.chat-sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+.chat-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333333;
+  }
+}
+
+// Make the message list take up available space
+app-chat-message-list {
+  flex: 1;
+  display: block;
+  overflow: scroll;
+}
+
+// Push the input to the bottom
+app-chat-input {
+  margin-top: auto;
+}

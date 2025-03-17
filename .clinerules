@@ -1,0 +1,3053 @@
+# Angular v19+ Development Standards and Best Practices
+
+## Core Architecture Guidelines
+
+We follow these core architectural patterns:
+
+- Components, directives, and pipes are standalone by default (Angular v19+)
+- Implement proper TypeScript types throughout the codebase
+- Use strong typing with interfaces and models
+- Follow the Single Responsibility Principle (SRP) in all components and services
+- Keep files focused on one thing (Rule of One)
+- Use Signals for reactive state management
+- Utilize dependency injection for service management
+- Use Deferrable Views for lazy-loading components
+- Implement the Directive Composition API for component behavior
+- Use route-level lazy loading with loadComponent
+
+## Angular Style Guide Compliance
+
+Following the Angular Style Guide:
+
+- Limit files to 400 lines of code
+- Define one thing (component, service, etc.) per file
+- Follow consistent naming conventions for all symbols
+- Use feature-based folder structure
+- Extract templates and styles to their own files for components
+- Properly decorate input and output properties
+- Follow proper component selector naming conventions with custom prefixes
+
+## Input Signals
+
+For component inputs, follow these guidelines:
+
+- Use the modern signal-based `input()` function instead of `@Input()` decorator:
+
+  ```typescript
+  // Preferred
+  value = input(0);  // Creates InputSignal
+
+  // Instead of
+  @Input() value = 0;
+  ```
+
+- For required inputs, use `input.required()`:
+  ```typescript
+  value = input.required();
+  ```
+- Apply input transformations when needed:
+  ```typescript
+  disabled = input(false, { transform: booleanAttribute });
+  value = input(0, { transform: numberAttribute });
+  ```
+- For two-way binding, use model inputs:
+
+  ```typescript
+  value = model(0);  // Creates a model input with change propagation
+
+  // Update model values with .set() or .update()
+  increment() {
+    this.value.update(v =&gt; v + 1);
+  }
+  ```
+
+- Use input aliases when necessary:
+  ```typescript
+  value = input(0, { alias: "sliderValue" });
+  ```
+
+## Component Development
+
+When creating components:
+
+- Use consistent naming pattern: feature.type.ts (e.g., hero-list.component.ts)
+- Extract templates to separate .html files for any non-trivial templates
+- Extract styles to separate .css/.scss files
+- Use signal-based inputs with `input()` function
+- Use model inputs with `model()` function for two-way binding
+- Implement lifecycle hook interfaces (OnInit, OnDestroy, etc.)
+- Keep components as elements (`selector: 'app-hero-detail'`)
+- Delegate complex component logic to services
+- Initialize inputs properly when needed (default values or required)
+- Use @defer for lazy loading heavy components or features
+- Implement proper error boundaries with try-catch blocks
+- Use control flow syntax (@if, @for, @switch) instead of structural directives
+- Implement proper loading and error states
+- Use computed() for derived state calculations
+
+## Styling Standards
+
+Our styling conventions:
+
+- Use component-specific styles with proper encapsulation
+- Follow BEM methodology for CSS class naming when not using Angular Material
+- Use Angular Material or other component libraries consistently
+- Implement proper theming and color systems
+- Support dark mode where appropriate
+- Follow accessibility (a11y) standards in all components
+
+## Services and Dependency Injection
+
+For services and DI:
+
+- Use `@Injectable()` decorator with `providedIn: 'root'` for singleton services
+- Make data services responsible for API calls and data operations
+- Implement proper error handling in services
+- Follow the Angular DI hierarchy appropriately
+- Use interfaces to define service contracts
+- Keep services focused on specific responsibilities
+
+## Directives and Pipes
+
+When creating directives and pipes:
+
+- Use attribute directives for presentation logic without templates
+- Prefer `@HostListener` and `@HostBinding` decorators for directive behavior
+- Use custom prefixes for directive selectors
+- Make pipes pure when possible for better performance
+- Follow naming conventions for pipes (camelCase)
+
+## State Management
+
+For state management:
+
+- Use Signals as the primary state management solution
+- Use signal inputs with `input()` for component inputs
+- Use model inputs with `model()` for two-way binding
+- Use writable signals with `signal()` for local component state
+- Use computed signals with `computed()` for derived state
+- Use effect() for handling side effects
+- Implement proper error handling in signal computations
+- Use toSignal() and toObservable() for RxJS interop
+- Use SignalStore (@ngrx/signals) for complex state management
+- Implement proper cleanup in effects using cleanup callbacks
+- Use signal-based forms with FormGroup
+- Properly unsubscribe from Observables in ngOnDestroy
+- Use OnPush change detection strategy for better performance
+
+## Control Flow and Deferrable Views
+
+For template control flow and lazy loading:
+
+- Use new control flow syntax instead of structural directives:
+
+  ```typescript
+  @if (condition) {
+    // content
+  } @else {
+    // else content
+  }
+
+  @for (item of items; track item.id) {
+    // content
+  }
+
+  @switch (value) {
+    @case (caseA) {
+      // content
+    }
+    @case (caseB) {
+      // content
+    }
+    @default {
+      // content
+    }
+  }
+  ```
+
+- Use @defer for lazy loading:
+
+  ```typescript
+  @defer {
+
+  } @loading {
+
+  } @error {
+
+  } @placeholder {
+
+  }
+  ```
+
+- Use defer triggers appropriately:
+
+  ```typescript
+  @defer (on viewport) // Load when visible
+  @defer (on idle) // Load during idle time
+  @defer (on immediate) // Load ASAP after priority content
+  @defer (on hover) // Load on hover
+  @defer (on interaction) // Load on any interaction
+  ```
+
+- Implement proper loading states for deferred content
+- Use placeholder content for better UX
+- Handle errors gracefully in deferred content
+- Consider using prefetching for critical components
+- Implement proper retry strategies for failed loads
+
+## Performance Requirements
+
+Performance optimization rules:
+
+- Use OnPush change detection strategy for performance-critical components
+- Implement proper change detection strategies
+- Use trackBy function with ngFor for better rendering performance
+- Optimize bundle size with lazy loading modules/components
+- Follow Angular's performance best practices
+- Use proper image optimization strategies
+
+## Testing Standards
+
+Testing requirements:
+
+- Write unit tests for components and services
+- Create integration tests for component interactions
+- Implement proper testing patterns for services and components
+- Use TestBed and ComponentFixture for component testing
+- Properly mock dependencies in unit tests
+- Follow Angular's testing best practices
+
+## API and Data Handling
+
+For API integration:
+
+- Use HttpClient for all API requests
+- Implement proper error handling for HTTP requests
+- Use interceptors for common HTTP request/response handling
+- Implement proper retry and backoff strategies
+- Follow proper data transformation patterns
+- Use proper typing for API responses
+
+# Performance Optimization Standards for TypeScript
+
+This document outlines coding standards and best practices specifically for performance optimization in TypeScript projects. Adhering to these guidelines will improve the speed, responsiveness, efficient use of resources, and overall user experien...
+
+# Code Style and Conventions Standards for Accessibility
+
+This document outlines the code style and conventions standards specifically for Accessibility development. Following these guidelines ensures maintainable, performant, secure, and accessible code. These standards are designed to be compatible with modern AI coding assistants such as GitHub Copilot and Cursor.
+
+## 1. General Principles
+
+### 1.1. Consistency
+
+**Do This:** Maintain a consistent style throughout the codebase. Use a code formatter like Prettier and a linter like ESLint to enforce consistency automatically. Configure these tools with Accessibility-specific rulesets.
+
+**Don't Do This:** Allow inconsistent indentation, naming conventions, or coding styles across different files or components.
+
+**Why:** Consistency improves readability and maintainability. Automatic formatting reduces cognitive load and potential merge conflicts because of style differences.
+
+### 1.2. Readability
+
+**Do This:** Write code that is easy to understand and follow. Use descriptive variable and function names. Add comments where necessary to explain complex logic.
+
+**Don't Do This:** Write overly complex or cryptic code that is difficult to understand without extensive effort.
+
+**Why:** Clear and understandable code reduces the likelihood of errors and makes it easier for other developers (or your future self) to maintain and debug.
+
+### 1.3. Modularity
+
+**Do This:** Break down complex tasks into smaller, reusable functions and components. Use design patterns to promote modularity and encapsulation.
+
+**Don't Do This:** Write large, monolithic functions or components that perform multiple tasks.
+
+**Why:** Modularity improves code reusability, testability, and maintainability. It makes it easier to isolate and fix bugs.
+
+## 2. Formatting and Naming Conventions
+
+### 2.1. Indentation and Spacing
+
+**Do This:** Use consistent indentation (e.g., 2 spaces or 4 spaces) and spacing to improve code readability. Configure your editor and code formatter to enforce these rules automatically.
+
+"""javascript
+// Example: 2 spaces indentation
+function calculateTotal(price, quantity) {
+const taxRate = 0.07;
+const taxAmount = price _ quantity _ taxRate;
+const total = price \* quantity + taxAmount;
+return total;
+}
+"""
+
+**Don't Do This:** Use inconsistent indentation or spacing, which makes code difficult to read.
+
+**Why:** Consistent indentation makes the code structure immediately apparent, improving readability and reducing errors.
+
+### 2.2. Line Length
+
+**Do This:** Keep lines of code reasonably short (e.g., no more than 80-120 characters) to avoid horizontal scrolling.
+
+**Don't Do This:** Write very long lines that require horizontal scrolling, which makes code difficult to read, especially on smaller screens.
+
+**Why:** Shorter lines of code are easier to scan and understand. They also make it easier to compare changes in version control systems.
+
+### 2.3. Variable and Function Naming
+
+**Do This:**
+
+- Use descriptive and meaningful names for variables and functions.
+- Use camelCase for variable and function names (e.g., "calculateTotalPrice", "productName").
+- Use PascalCase for class and component names (e.g., "ShoppingCart", "ProductDetails").
+- Use UPPER_SNAKE_CASE for constants (e.g., "MAX_PRODUCTS", "DEFAULT_TAX_RATE").
+- For Accessibility identifiers, prefix with "aria" attributes for variables related to ARIA roles, states, and properties (e.g., "ariaLabel", "ariaHidden").
+
+"""javascript
+// Example: Meaningful variable and function names
+const productName = "Example Product";
+const productPrice = 20.00;
+
+function calculateTotalPrice(quantity) {
+const totalPrice = productPrice \* quantity;
+return totalPrice;
+}
+
+let ariaLabel = "Close dialog"; // Accessible label
+"""
+
+**Don't Do This:**
+
+- Use single-letter or abbreviated variable names (e.g., "x", "y", "tmp").
+- Use inconsistent naming conventions.
+- Use names that do not accurately reflect the purpose of the variable or function.
+
+**Why:** Descriptive names make code easier to understand and reduce the need for comments. Consistency in naming improves code readability and reduces the cognitive load when working with different parts of the codebase.
+
+### 2.4. Accessibility Property Naming
+
+**Do This:**
+
+When working with ARIA attributes:
+
+- Use JavaScript naming conventions for variables holding attribute values.
+- Ensure that names semantically align with the related ARIA attribute's purpose.
+- Consider incorporating accessibility-specific prefixes/suffixes (e.g., "ariaLabelText").
+
+"""javascript
+// Good Example
+
+let ariaLabelText = "Close dialog";
+element.setAttribute('aria-label', ariaLabelText);
+
+function setAriaExpanded(element, isExpanded) {
+element.setAttribute('aria-expanded', isExpanded.toString());
+}
+"""
+
+**Don't Do This:**
+
+- Use ARIA attribute name directly as a variable name (e.g. "aria-label").
+- Use non-descriptive names that don't indicate the purpose of the attribute value.
+
+"""javascript
+// Bad Example
+
+let arialabel = "Close"; // Typo and poor readability
+
+element.setAttribute('aria-label', arialabel);
+"""
+
+**Why:** Clear naming and consistent styles tailored for accessibility attributes improves code maintainability. Errors related to accessibility configurations would be easier to spot and fix.
+
+## 3. Accessibility-Specific Formatting
+
+### 3.1. ARIA Attributes and Roles
+
+**Do This:**
+
+- Use valid ARIA attributes and roles semantically.
+- Ensure "aria-\*" attributes are used correctly, using descriptive values.
+- Test with screen readers to verify correct announcement of dynamic content.
+
+"""html
+
+<!-- Example: Using ARIA roles and attributes -->
+<div role="dialog" aria-labelledby="dialogTitle" aria-modal="true">
+  <h2 id="dialogTitle">Confirmation</h2>
+  <p>Are you sure you want to proceed?</p>
+  <button onclick="closeDialog()">Close</button>
+</div>
+"""
+
+**Don't Do This:**
+
+- Use ARIA attributes and roles improperly or redundantly.
+- Overuse ARIA attributes, especially when native HTML elements provide the same semantics. Prefer semantic HTML.
+- Use "aria-hidden="true"" on focusable elements, which can create a keyboard trap.
+
+**Why:** Correct ARIA usage provides necessary information to assistive technologies, enabling users with disabilities to effectively use web applications. Incorrect usage can degrade accessibility.
+
+### 3.2. Semantic HTML
+
+**Do This:**
+
+- Use semantic HTML5 elements (e.g., "<header>", "<nav>", "<main>", "<footer>", "<article>", "<aside>").
+- Use heading elements ("<h1>" - "<h6>") in a logical order.
+- Use lists ("<ul>", "<ol>", "<dl>") for lists of items.
+- Use "<button>" elements for actions, and "<a>" elements for navigation.
+- Employ "<label>" elements associated with form inputs.
+
+"""html
+
+<!-- Example: Semantic HTML5 -->
+<header>
+  <h1>My Website</h1>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <article>
+    <h2>Article Title</h2>
+    <p>Article content goes here...</p>
+  </article>
+</main>
+
+<form>
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name">
+  <button type="submit">Submit</button>
+</form>
+
+<footer>
+  <p>&copy; 2024 My Website</p>
+</footer>
+"""
+
+**Don't Do This:**
+
+- Use "<div>" or "<span>" elements for everything.
+- Skip heading levels (e.g., going from "<h1>" to "<h3>" without an "<h2>").
+- Use non-semantic elements (e.g., using a "<div>" as a button).
+- Forget to associate labels with form controls.
+
+**Why:** Semantic HTML provides a clear structure to the content, making it easier for assistive technologies to understand and navigate the page. It also improves SEO and maintainability.
+
+### 3.3. Keyboard Navigation
+
+**Do This:**
+
+- Ensure that all interactive elements are keyboard accessible.
+- Use the "tabindex" attribute to control the tab order when necessary. When used, ensure it has logical order within the page.
+- Provide visual focus indicators for keyboard users.
+- Manage focus programmatically when necessary (e.g., after opening a dialog).
+
+"""javascript
+// Example: Managing focus programmatically
+function openDialog() {
+const dialog = document.getElementById('myDialog');
+dialog.style.display = 'block';
+const firstFocusableElement = dialog.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+if (firstFocusableElement) {
+firstFocusableElement.focus();
+}
+}
+
+function closeDialog() {
+const dialog = document.getElementById('myDialog');
+dialog.style.display = 'none';
+}
+"""
+
+"""css
+/_ Example: Visual focus indicator _/
+:focus {
+outline: 2px solid blue;
+outline-offset: 2px;
+}
+"""
+
+**Don't Do This:**
+
+- Create keyboard traps (situations where a user cannot move focus away from an element using the keyboard).
+- Remove the default focus outline without providing an alternative visual indicator.
+- Rely solely on mouse events for interactivity.
+
+**Why:** Keyboard accessibility is essential for users who cannot use a mouse or other pointing device. Providing clear focus indicators helps keyboard users understand which element is currently selected.
+
+### 3.4. Color Contrast
+
+**Do This:**
+
+- Ensure sufficient color contrast between text and background colors (at least 4.5:1 for normal text and 3:1 for large text as per WCAG 2.1 AA).
+- Use a color contrast analyzer tool to verify contrast ratios.
+
+"""css
+/_ Example: Ensuring sufficient color contrast _/
+body {
+color: #333; /_ Dark gray text _/
+background-color: #fff; /_ White background _/
+}
+"""
+
+**Don't Do This:**
+
+- Use color combinations with insufficient contrast, which makes text difficult to read for users with low vision.
+- Rely solely on color to convey information, as this is inaccessible to color-blind users.
+
+**Why:** Sufficient color contrast ensures that text is readable for users with low vision or color blindness.
+
+## 4. Code Examples and Best Practices
+
+### 4.1. Accessible Forms
+
+"""html
+
+<form>
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" aria-describedby="nameHelp">
+    <small id="nameHelp" class="form-text text-muted">Enter your full name.</small>
+  </div>
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+  </div>
+  <div class="form-group">
+    <label for="comment">Comment:</label>
+    <textarea id="comment" name="comment" rows="4"></textarea>
+  </div>
+  <button type="submit">Submit</button>
+</form>
+"""
+
+**Best Practices Followed:**
+
+- Use of "<label>" elements to provide clear labels for form controls. The "for" attribute should point to the "id" of the input.
+- Use of "aria-describedby" to provide additional context or instructions for a form control.
+- Use of the "required" attribute to indicate required fields.
+
+### 4.2. Accessible Modal Dialogs
+
+"""html
+<button onclick="openDialog()">Open Dialog</button>
+
+<div id="myDialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" style="display: none;">
+  <h2 id="dialogTitle">Confirmation</h2>
+  <p>Are you sure you want to proceed?</p>
+  <button onclick="closeDialog()">Close</button>
+</div>
+
+<script>
+function openDialog() {
+  const dialog = document.getElementById('myDialog');
+  dialog.style.display = 'block';
+  const firstFocusableElement = dialog.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (firstFocusableElement) {
+        firstFocusableElement.focus();
+    }
+}
+
+function closeDialog() {
+  const dialog = document.getElementById('myDialog');
+  dialog.style.display = 'none';
+}
+</script>
+
+"""
+
+**Best Practices Followed:**
+
+- Use of "role="dialog"" and "aria-modal="true"" to identify the dialog to assistive technologies.
+- Use of "aria-labelledby" to associate the dialog with its title.
+- Focus management to ensure that focus is trapped within the dialog while it is open.
+- Hiding the dialog by default and making it visible when the button is clicked using javascript.
+
+### 4.3. Accessible Images
+
+"""html
+
+<!-- Example: Accessible images -->
+<img src="example.jpg" alt="Description of the image">
+
+<img src="decorative.jpg" alt="" aria-hidden="true">
+"""
+
+**Best Practices Followed:**
+
+- Providing descriptive "alt" text for meaningful images to convey their content and purpose.
+- Using an empty "alt" attribute ("alt=""") and "aria-hidden="true"" for decorative images to prevent screen readers from announcing them.
+
+## 5. Common Anti-Patterns and Mistakes
+
+### 5.1. Ignoring Semantic HTML
+
+**Anti-Pattern:** Using "<div>" and "<span>" elements for everything, without regard to their semantic meaning.
+
+**Mistake:** Failing to use appropriate HTML5 elements like "<nav>", "<article>", "<aside>", and "<footer>".
+
+**Why:** This reduces accessibility and SEO and makes maintenance harder.
+
+### 5.2. Incorrect ARIA Usage
+
+**Anti-Pattern:** Overusing ARIA attributes or using them incorrectly.
+
+**Mistake:** Adding "role="button"" to an "<a>" tag without providing the necessary keyboard support.
+
+**Why:** This can confuse assistive technologies and create a poor user experience.
+
+### 5.3. Poor Keyboard Accessibility
+
+**Anti-Pattern:** Creating elements that are only accessible with a mouse.
+
+**Mistake:** Failing to provide visual focus indicators for keyboard users or creating keyboard traps.
+
+**Why:** Users who rely on the keyboard for navigation will not be able to use the application effectively.
+
+### 5.4. Insufficient Color Contrast
+
+**Anti-Pattern:** Using color combinations that do not provide sufficient contrast.
+
+**Mistake:** Failing to test color contrast using an analyzer tool.
+
+**Why:** Users with low vision or color blindness will have difficulty reading text.
+
+## 6. Technology-Specific Details
+
+### 6.1. React
+
+- Use JSX syntax to write HTML-like code in JavaScript files.
+- Use React's "ref" attribute to manage focus programmatically.
+- Use React's "useEffect" hook to perform side effects, such as setting focus after a component mounts.
+
+"""jsx
+// Example: Managing focus in React
+import React, { useRef, useEffect } from 'react';
+
+function MyComponent() {
+const buttonRef = useRef(null);
+
+useEffect(() => {
+if (buttonRef.current) {
+buttonRef.current.focus();
+}
+}, []);
+
+return (
+<button ref={buttonRef}>Focus Me</button>
+);
+}
+"""
+
+### 6.2. Angular
+
+- Use Angular's template syntax to bind data and events.
+- Use Angular's "ElementRef" to manage DOM elements programmatically.
+- Use Angular's "HostListener" decorator to listen for events on the host element.
+
+"""typescript
+// Example: Managing focus in Angular
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+
+@Component({
+selector: 'app-my-component',
+template: '<button #myButton>Focus Me</button>'
+})
+export class MyComponent implements AfterViewInit {
+@ViewChild('myButton') myButton: ElementRef;
+
+ngAfterViewInit() {
+this.myButton.nativeElement.focus();
+}
+}
+"""
+
+### 6.3. Vue.js
+
+- Use Vue's template syntax to bind data and events.
+- Use Vue's "ref" attribute to access DOM elements.
+- Use Vue's "mounted" lifecycle hook to perform side effects after the component is mounted.
+
+"""vue
+
+<!-- Example: Managing focus in Vue.js -->
+<template>
+  <button ref="myButton">Focus Me</button>
+</template>
+
+<script>
+export default {
+  mounted() {
+    this.$refs.myButton.focus();
+  }
+}
+</script>
+
+"""
+
+## 7. Performance Optimization Techniques
+
+### 7.1. Lazy Loading
+
+**Do This:** Implement lazy loading for images and other media to improve page load times.
+
+"""html
+
+<!-- Example: Lazy loading images -->
+<img src="image.jpg" alt="Example" loading="lazy">
+"""
+
+**Why:** Lazy loading reduces the initial load time by only loading resources when they are needed.
+
+### 7.2. Code Splitting
+
+**Do This:** Split large JavaScript bundles into smaller chunks to improve initial load times. Use dynamic imports where possible.
+
+"""javascript
+// Example: Dynamic import
+async function loadComponent() {
+const { MyComponent } = await import('./MyComponent');
+// Use MyComponent
+}
+"""
+
+**Why:** Code splitting reduces the amount of JavaScript that needs to be downloaded and parsed initially.
+
+### 7.3. Optimize ARIA updates
+
+**Do This**: Avoid excessive updates to ARIA attributes, which can degrade performance on some devices. Batch updates where possible.
+
+**Why**: Updating ARIA attributes triggers recalculations by assistive technologies, which consume resources.
+
+## 8. Security Best Practices
+
+### 8.1. Cross-Site Scripting (XSS)
+
+**Do This:** Sanitize user input to prevent XSS attacks. Use appropriate escaping techniques for different contexts (e.g., HTML, JavaScript, CSS).
+
+**Why:** XSS attacks can allow attackers to inject malicious code into your application.
+
+### 8.2. Secure Communication
+
+**Do This:** Use HTTPS to encrypt communication between the client and server.
+
+**Why:** HTTPS prevents attackers from intercepting sensitive data in transit.
+
+### 8.3. Third-Party Libraries
+
+**Do This:** Keep third-party libraries up-to-date to patch security vulnerabilities.
+
+**Why:** Outdated libraries may contain known security vulnerabilities that attackers can exploit.
+
+## 9. Conclusion
+
+Adhering to these code style and conventions ensures that your code is accessible, maintainable, performant, and secure. By following these guidelines, you can create high-quality software that meets the needs of all users, including those with disabilities. Remember to use automated tools like code formatters and linters to enforce these standards consistently across your codebase. Continual learning and adaptation to new accessibility guidelines will ensure long standards are upheld and stay current with development enhancements.
+
+# Component Design Standards for Accessibility
+
+This document outlines coding standards for designing accessible components. It focuses on creating reusable, maintainable, and accessible UI elements, adhering to the latest accessibility best practices and standards, including WCAG (Web Content Acces...
+
+# Component Design Standards for Angular Material
+
+This document outlines component design standards for Angular Material projects. These guidelines promote reusable, maintainable, and performant Angular Material components, leveraging the latest framework features and architectural patterns.
+
+## 1. Architectural Principles
+
+### 1.1. Single Responsibility Principle (SRP)
+
+**Standard:** A component should have one, and only one, reason to change. Avoid creating "god components" that handle multiple unrelated responsibilities.
+
+**Do This:** Break down complex features into smaller, focused components.
+
+**Don't Do This:** Bundle unrelated logic (e.g., data fetching, form validation, UI presentation) within a single component.
+
+**Why:** SRP leads to improved testability, reusability, and lower maintenance costs due to reduced coupling.
+
+**Example:**
+
+Instead of a single "UserManagementComponent" that handles user creation, editing, and deletion, create three separate components: "UserCreateComponent", "UserEditComponent", and "UserDeleteComponent".
+
+"""typescript
+// user-create.component.ts
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+@Component({
+selector: 'app-user-create',
+templateUrl: './user-create.component.html',
+styleUrls: ['./user-create.component.scss']
+})
+export class UserCreateComponent {
+userForm: FormGroup;
+@Output() userCreated = new EventEmitter<any>();
+
+constructor(private fb: FormBuilder) {
+this.userForm = this.fb.group({
+username: ['', Validators.required],
+email: ['', [Validators.required, Validators.email]]
+});
+}
+
+onSubmit() {
+if (this.userForm.valid) {
+this.userCreated.emit(this.userForm.value);
+}
+}
+}
+"""
+
+"""html
+
+<!-- user-create.component.html -->
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline">
+    <mat-label>Username</mat-label>
+    <input matInput placeholder="Username" formControlName="username">
+    <mat-error *ngIf="userForm.get('username')?.hasError('required')">Username is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput placeholder="Email" formControlName="email">
+    <mat-error *ngIf="userForm.get('email')?.hasError('required')">Email is required</mat-error>
+    <mat-error *ngIf="userForm.get('email')?.hasError('email')">Invalid email</mat-error>
+  </mat-form-field>
+
+<button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">Create User</button>
+
+</form>
+"""
+
+### 1.2. Separation of Concerns (SoC)
+
+**Standard:** Divide the application into distinct sections, each addressing a separate concern.
+
+**Do This:** Isolate presentation logic (component templates), component logic (component class), and data access (services).
+
+**Don't Do This:** Mix UI logic directly within data services or perform database operations within component templates.
+
+**Why:** SoC improves code readability, testability, and maintainability by decoupling different parts of the application.
+
+**Example:**
+
+A "ProductListComponent" displays a list of products. The data fetching logic resides within a "ProductService". The component only concerns itself with displaying the products retrieved by the service.
+
+"""typescript
+// product-list.component.ts
+import { Component, OnInit } from '@angular/core';
+import { Product } from './product.model';
+import { ProductService } from './product.service';
+
+@Component({
+selector: 'app-product-list',
+templateUrl: './product-list.component.html',
+styleUrls: ['./product-list.component.scss']
+})
+export class ProductListComponent implements OnInit {
+products: Product[] = [];
+isLoading = true;
+
+constructor(private productService: ProductService) {}
+
+ngOnInit(): void {
+this.productService.getProducts().subscribe(products => {
+this.products = products;
+this.isLoading = false;
+});
+}
+}
+"""
+
+"""typescript
+// product.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Product } from './product.model';
+
+@Injectable({
+providedIn: 'root'
+})
+export class ProductService {
+private apiUrl = '/api/products'; // Replace with your API endpoint
+
+constructor(private http: HttpClient) {}
+
+getProducts(): Observable<Product[]> {
+return this.http.get<Product[]>(this.apiUrl);
+}
+}
+"""
+
+### 1.3. Don't Repeat Yourself (DRY)
+
+**Standard:** Avoid duplicating code. Extract common logic into reusable functions, services, or components.
+
+**Do This:** Create shared components, pipes, or services for functionality used in multiple parts of the application.
+
+**Don't Do This:** Copy and paste the same code block into multiple components.
+
+**Why:** DRY promotes code efficiency, minimizes errors, and simplifies maintenance.
+
+**Example:**
+
+Create a reusable "ConfirmationDialogComponent" for all confirmation prompts across the application. This way the dialog's logic and styling is centralized.
+
+"""typescript
+// confirmation-dialog.component.ts
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+export interface ConfirmationDialogData {
+title: string;
+message: string;
+}
+
+@Component({
+selector: 'app-confirmation-dialog',
+templateUrl: './confirmation-dialog.component.html',
+styleUrls: ['./confirmation-dialog.component.scss']
+})
+export class ConfirmationDialogComponent {
+constructor(
+public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+@Inject(MAT_DIALOG_DATA) public data: ConfirmationDialogData
+) {}
+
+onNoClick(): void {
+this.dialogRef.close(false);
+}
+}
+"""
+
+"""html
+
+<!-- confirmation-dialog.component.html -->
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <p>{{data.message}}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Yes</button>
+</div>
+"""
+
+## 2. Component Structure
+
+### 2.1. Folder Structure
+
+**Standard:** Organize components into logical folders based on feature or module.
+
+**Do This:** Create separate folders for different sections of the application (e.g., "/components/user", "/components/product").
+
+**Don't Do This:** Place all components in a single flat directory.
+
+**Why:** A well-defined folder structure enhances project navigability and maintainability.
+
+**Example:**
+
+"""
+src/app/
+├── components/
+│ ├── user/
+│ │ ├── user-list/
+│ │ │ ├── user-list.component.ts
+│ │ │ ├── user-list.component.html
+│ │ │ ├── user-list.component.scss
+│ │ ├── user.module.ts
+│ ├── product/
+│ │ ├── product-details/
+│ │ │ ├── product-details.component.ts
+│ │ │ ├── product-details.component.html
+│ │ │ ├── product-details.component.scss
+│ │ ├── product.module.ts
+"""
+
+### 2.2. Component File Naming
+
+**Standard:** Follow a consistent naming convention for component files: "[component-name].component.[ts|html|scss]".
+
+**Do This:** Use hyphenated names for component selectors (e.g., "app-user-list").
+
+**Don't Do This:** Use camelCase or PascalCase for selector names.
+
+**Why:** Consistent naming promotes code readability and reduces ambiguity.
+
+**Example:**
+
+- "user-list.component.ts"
+- "user-list.component.html"
+- "user-list.component.scss"
+
+### 2.3. Component Class Naming
+
+**Standard:** Use PascalCase for component class names and append "Component" to the name.
+
+**Do This:** Name the "user-list" component as "UserListComponent".
+
+**Don't Do This:** Omit the "Component" suffix or use camelCase.
+
+**Why:** Consistent class naming improves code readability and maintainability.
+
+**Example:**
+
+"""typescript
+// user-list.component.ts
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+selector: 'app-user-list',
+templateUrl: './user-list.component.html',
+styleUrls: ['./user-list.component.scss']
+})
+export class UserListComponent implements OnInit {
+// ...
+}
+"""
+
+## 3. Component Implementation
+
+### 3.1. Input and Output Properties
+
+**Standard:** Use "@Input()" and "@Output()" decorators for passing data into and out of components.
+
+**Do This:** Clearly define the type of data being passed using TypeScript.
+
+**Don't Do This:** Rely on component state mutations for communication.
+
+**Why:** "@Input()" and "@Output()" create a clear, unidirectional data flow, which improves component reusability and testability.
+
+**Example:**
+
+"""typescript
+// user-details.component.ts
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { User } from '../user.model';
+
+@Component({
+selector: 'app-user-details',
+templateUrl: './user-details.component.html',
+styleUrls: ['./user-details.component.scss']
+})
+export class UserDetailsComponent implements OnInit {
+@Input() user!: User; // User object passed in as input
+@Output() userDeleted = new EventEmitter<number>(); // Event emitted when a user is deleted
+
+ngOnInit() {
+if (!this.user) {
+throw new Error("User input is required!");
+}
+}
+
+deleteUser() {
+this.userDeleted.emit(this.user.id);
+}
+}
+"""
+
+"""html
+
+<!-- user-list.component.html (Parent Component) -->
+
+<app-user-details [user]="selectedUser" (userDeleted)="onUserDeleted($event)"></app-user-details>
+"""
+
+### 3.2. Immutability
+
+**Standard:** Treat input properties as immutable within the component. Avoid modifying input values directly.
+
+**Do This:** Create local copies of the input data if modification is required.
+
+**Don't Do This:** Modify the original "@Input()" property directly.
+
+**Why:** Immutability prevents unexpected side effects and simplifies debugging.
+
+**Example:**
+
+"""typescript
+// product-details.component.ts
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Product } from '../product.model';
+
+@Component({
+selector: 'app-product-details',
+templateUrl: './product-details.component.html',
+styleUrls: ['./product-details.component.scss']
+})
+export class ProductDetailsComponent implements OnChanges {
+@Input() product!: Product;
+productCopy!: Product; // create a local copy
+
+ngOnChanges(changes: SimpleChanges): void {
+if (changes['product'] && this.product) {
+this.productCopy = { ...this.product }; // Create a shallow copy using the spread operator
+}
+}
+
+updatePrice(newPrice: number) {
+this.productCopy.price = newPrice; // Modify the local copy
+}
+}
+"""
+
+### 3.3. Change Detection Strategy
+
+**Standard:** Use "ChangeDetectionStrategy.OnPush" for components that rely on input properties and immutable data.
+
+**Do This:** Configure components to only update when their input properties change.
+
+**Don't Do This:** Rely on default change detection for all components, which can lead to performance issues.
+
+**Why:** "OnPush" change detection optimizes performance by reducing the number of unnecessary component updates.
+
+**Example:**
+
+"""typescript
+// display-user.component.ts
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { User } from '../user.model';
+
+@Component({
+selector: 'app-display-user',
+templateUrl: './display-user.component.html',
+styleUrls: ['./display-user.component.scss'],
+changeDetection: ChangeDetectionStrategy.OnPush // Enable OnPush change detection
+})
+export class DisplayUserComponent {
+@Input() user!: User;
+}
+"""
+
+### 3.4. Lifecycle Hooks
+
+**Standard:** Use lifecycle hooks judiciously and only when necessary.
+
+**Do This:** Use "OnInit" for initialization logic, "OnChanges" for responding to input property changes and "OnDestroy" for cleanup (e.g., unsubscribing from observables).
+
+**Don't Do This:** Perform expensive operations in every lifecycle hook.
+
+**Why:** Proper use of lifecycle hooks optimizes component lifecycle management and avoids performance bottlenecks.
+
+**Example:**
+
+"""typescript
+// data-table.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { DataService } from '../data.service';
+
+@Component({
+selector: 'app-data-table',
+templateUrl: './data-table.component.html',
+styleUrls: ['./data-table.component.scss']
+})
+export class DataTableComponent implements OnInit, OnDestroy {
+data: any[] = [];
+private dataSubscription!: Subscription;
+
+constructor(private dataService: DataService) {}
+
+ngOnInit(): void {
+this.dataSubscription = this.dataService.getData().subscribe(data => {
+this.data = data;
+});
+}
+
+ngOnDestroy(): void {
+if (this.dataSubscription) {
+this.dataSubscription.unsubscribe(); // Unsubscribe to prevent memory leaks
+}
+}
+}
+"""
+
+### 3.5. Template Design
+
+**Standard:** Keep templates concise and readable.
+
+**Do This:** Use template variables ("#") and the "*ngIf", "*ngFor", and "\*ngSwitch" directives for conditional rendering and iteration.
+
+**Don't Do This:** Embed complex logic directly within templates.
+
+**Why:** Concise templates improve readability and maintainability.
+
+**Example:**
+
+"""html
+
+<!-- user-list.component.html -->
+<mat-list>
+  <mat-list-item *ngFor="let user of users; let i = index">
+    <h3 mat-line> {{user.username}} </h3>
+    <p mat-line> {{user.email}} </p>
+    <button mat-icon-button (click)="selectUser(user)">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <mat-divider *ngIf="i !== users.length - 1"></mat-divider>
+  </mat-list-item>
+</mat-list>
+
+<div *ngIf="selectedUser">
+  <app-user-details [user]="selectedUser"></app-user-details>
+</div>
+"""
+
+### 3.6. Angular Material Component Usage
+
+**Standard:** Utilize Angular Material components effectively and consistently.
+
+**Do This:** Follow Material Design guidelines for UI elements. Use the various "Mat" components (e.g., "MatButton", "MatCard", "MatTable"). Configure these components using their corresponding APIs (e.g., color properties, input configurations).
+
+**Don't Do This:** Reinvent the wheel by creating custom UI elements that duplicate Angular Material components. Misuse them by overriding too much of their default styling/behavior.
+
+**Why:** Leveraging Angular Material ensures a consistent, accessible, and performant user interface.
+
+"""html
+
+<!-- product-card.component.html -->
+<mat-card class="product-card">
+  <mat-card-header>
+    <mat-card-title>{{ product.name }}</mat-card-title>
+    <mat-card-subtitle>{{ product.category }}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="product.imageUrl" alt="{{ product.name }}">
+  <mat-card-content>
+    <p>{{ product.description }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button color="primary">Buy Now</button>
+    <button mat-button>Learn More</button>
+  </mat-card-actions>
+</mat-card>
+"""
+
+### 3.7. Accessibility
+
+**Standard:** Ensure all components are accessible and comply with accessibility standards (WCAG).
+
+**Do This:** Use semantic HTML elements, provide ARIA attributes, and ensure proper keyboard navigation. Use accessibility testing tools.
+
+**Don't Do This:** Ignore accessibility considerations during component development.
+
+**Why:** Accessibility ensures that the application is usable by everyone, including users with disabilities.
+
+**Example:**
+
+"""html
+
+<!-- accessible-button.component.html -->
+<button mat-raised-button color="primary" aria-label="Submit form" type="submit">
+  <mat-icon>send</mat-icon>
+  Submit
+</button>
+
+<mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput placeholder="Search" aria-label="Search input">
+    <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+"""
+
+### 3.8 Styling
+
+**Standard:** Use SCSS for component styling.
+
+**Do This:** Use variables for colors, fonts, and spacing to ensure consistency. Use flexbox or grid layout for responsive design. Follow a BEM-like naming convention (Block, Element, Modifier) in class names. Encapsulate styles within the component using "ViewEncapsulation.Emulated" (default) or "ViewEncapsulation.ShadowDom".
+
+**Don't Do This:** Use inline styles or global styles that affect other components unexpectedly. Overspecify selectors.
+
+**Why:** Consistent styling improves the visual appeal and maintainability of the application.
+
+**Example:**
+
+"""scss
+// \_variables.scss (Shared variables file)
+$primary-color: #3f51b5;
+$accent-color: #e91e63;
+$font-family: 'Roboto', sans-serif;
+
+// user-list.component.scss
+@import 'variables';
+
+.user-list {
+font-family: $font-family;
+&\_\_item { // Element
+display: flex;
+align-items: center;
+padding: 10px;
+border-bottom: 1px solid #eee;
+
+    &--highlighted { // Modifier
+      background-color: lighten($primary-color, 40%);
+    }
+
+}
+}
+"""
+
+## 4. Communication Patterns
+
+### 4.1. Component Interaction
+
+**Standard:** Establish clear communication patterns between components.
+
+**Do This:** Use "@Input()" and "@Output()" for parent-child communication. For more complex scenarios, consider using a service with RxJS Subjects or a state management library like NgRx or Akita.
+
+**Don't Do This:** Pass data directly between unrelated components or rely on global state for simple interactions.
+
+**Why:** Well-defined communication patterns improve component decoupling and testability.
+
+**Example:**
+
+For cross-component communication, use a shared service with RxJS Subjects:
+
+"""typescript
+// shared-data.service.ts
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Injectable({
+providedIn: 'root'
+})
+export class SharedDataService {
+private dataSubject = new Subject<any>();
+data$ = this.dataSubject.asObservable();
+
+setData(data: any) {
+this.dataSubject.next(data);
+}
+}
+
+// component-a.component.ts
+import { Component } from '@angular/core';
+import { SharedDataService } from './shared-data.service';
+
+@Component({
+selector: 'app-component-a',
+template: '<button (click)="sendData()">Send Data</button>'
+})
+export class ComponentAComponent {
+constructor(private sharedDataService: SharedDataService) {}
+
+sendData() {
+this.sharedDataService.setData({ message: 'Hello from Component A!' });
+}
+}
+
+// component-b.component.ts
+import { Component, OnInit } from '@angular/core';
+import { SharedDataService } from './shared-data.service';
+
+@Component({
+selector: 'app-component-b',
+template: '<div>Received Data: {{ data }}</div>'
+})
+export class ComponentBComponent implements OnInit {
+data: any;
+
+constructor(private sharedDataService: SharedDataService) {}
+
+ngOnInit() {
+this.sharedDataService.data$.subscribe(data => {
+this.data = data;
+});
+}
+}
+"""
+
+## 5. Testing
+
+### 5.1. Unit Testing
+
+**Standard:** Write unit tests for each component to verify its functionality.
+
+**Do This:** Use the Angular testing utilities ("TestBed", "ComponentFixture") to create and interact with components in a test environment. Mock dependencies (services) to isolate the component being tested. Test "@Input" and "@Output" functionality.
+
+**Don't Do This:** Skip unit tests or write tests that are too shallow (e.g., only checking that the component renders without errors).
+
+**Why:** Unit tests ensure that components function correctly and prevent regressions.
+
+**Example:**
+
+"""typescript
+// user-list.component.spec.ts
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { UserListComponent } from './user-list.component';
+import { UserService } from './user.service';
+import { of } from 'rxjs';
+
+describe('UserListComponent', () => {
+let component: UserListComponent;
+let fixture: ComponentFixture<UserListComponent>;
+let userService: UserService;
+
+beforeEach(async () => {
+const userServiceSpy = jasmine.createSpyObj('UserService', ['getUsers']);
+await TestBed.configureTestingModule({
+declarations: [ UserListComponent ],
+providers: [
+{ provide: UserService, useValue: userServiceSpy }
+]
+})
+.compileComponents();
+
+    userService = TestBed.inject(UserService);
+    userServiceSpy.getUsers.and.returnValue(of([{ id: 1, username: 'testuser', email: 'test@example.com' }]));
+
+    fixture = TestBed.createComponent(UserListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+});
+
+it('should create', () => {
+expect(component).toBeTruthy();
+});
+
+it('should load users on init', () => {
+expect(component.users.length).toBe(1);
+});
+});
+"""
+
+## 6. Performance Optimization
+
+### 6.1. Lazy Loading
+
+**Standard:** Lazy load modules and components that are not immediately required on application startup.
+
+**Do This:** Use Angular's lazy loading feature (using "loadChildren" in the routing configuration) to load modules on demand.
+
+**Don't Do This:** Load all modules upfront, which can significantly increase application startup time.
+
+**Why:** Lazy loading improves application startup time and reduces initial bundle size.
+
+**Example:**
+
+"""typescript
+// app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+{
+path: 'users',
+loadChildren: () => import('./components/user/user.module').then(m => m.UserModule)
+},
+{
+path: 'products',
+loadChildren: () => import('./components/product/product.module').then(m => m.ProductModule)
+}
+];
+
+@NgModule({
+imports: [RouterModule.forRoot(routes)],
+exports: [RouterModule]
+})
+export class AppRoutingModule {}
+"""
+
+### 6.2. Virtualization
+
+**Standard:** Use Angular Material's virtualization capabilities ("cdk-virtual-scroll-viewport") for displaying large lists of data.
+
+**Do This:** Use "cdk-virtual-scroll-viewport" with "MatList" or "MatTable" to render only the visible items in the list.
+
+**Don't Do This:** Render all items in the list at once, which can lead to performance issues with large datasets.
+
+**Why:** Virtualization dramatically improves performance when rendering large lists by only rendering visible items.
+
+**Example:**
+"""html
+
+<!-- large-list.component.html -->
+<cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+  <mat-list-item *cdkVirtualFor="let item of items">{{item}}</mat-list-item>
+</cdk-virtual-scroll-viewport>
+"""
+
+"""scss
+.example-viewport {
+height: 200px;
+width: 300px;
+border: 1px solid black;
+}
+
+"""
+
+### 6.3. Avoid Unnecessary Re-renders
+
+**Standard:** Prevent unnecessary component re-renders.
+
+**Do This:** Implement "OnPush" change detection strategy, use "trackBy" function in "\*ngFor" to minimize DOM updates.
+
+**Don't Do This:** Trigger change detection manually without a valid reason.
+
+**Why:** Reducing re-renders improves performance.
+
+"""html
+
+<div *ngFor="let item of items; trackBy: trackByFn">
+  {{ item.name }}
+</div>
+"""
+
+"""typescript
+trackByFn(index: number, item: any): any {
+return item.id;
+}
+"""
+
+## 7. Security
+
+### 7.1. Input Sanitization and Validation
+
+**Standard:** Sanitize and validate all user inputs to prevent Cross-Site Scripting (XSS) and other injection attacks.
+
+**Do This:** Use Angular's built-in sanitization features (e.g., "DomSanitizer") when displaying user-generated content. Use Angular Forms validators to validate user inputs.
+
+**Don't Do This:** Trust user inputs without validation or sanitization.
+
+**Why:** Proper sanitization and validation protect the application from security vulnerabilities.
+
+**Example:**
+
+"""typescript
+// safe-html.component.ts
+import { Component, Input, SecurityContext } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+@Component({
+selector: 'app-safe-html',
+template: '<div [innerHTML]="safeHtml"></div>'
+})
+export class SafeHtmlComponent {
+@Input() unsafeHtml!: string;
+safeHtml!: SafeHtml;
+
+constructor(private sanitizer: DomSanitizer) {}
+
+ngOnChanges(): void {
+this.safeHtml = this.sanitizer.sanitize(SecurityContext.HTML, this.unsafeHtml) || '';
+}
+}
+"""
+
+### 7.2. Authentication and Authorization
+
+**Standard:** Implement robust authentication and authorization mechanisms to protect sensitive data and functionality.
+
+**Do This:** Use Angular's "HttpClient" to communicate with a secure backend API. Implement role-based access control (RBAC) using guards in Angular Routing.
+
+**Don't Do This:** Store sensitive data in the client-side or implement authentication logic in the front end.
+
+**Why:** Proper authentication and authorization ensure that only authorized users can access specific parts of the application.
+
+This comprehensive guide provides a solid foundation for creating high-quality Angular Material components. Adhering to these standards will lead to more maintainable, performant, and secure applications. Remember to regularly review and update these guidelines to keep pace with the evolving Angular Material ecosystem.
+
+# State Management Standards for Angular Material
+
+This document outlines the standards for state management when developing Angular applications using Angular Material. It covers approaches to managing application state, data flow, and reactivity, with specific applications to Angular Material components and overall application architecture. Adhering to these standards ensures maintainability, performance, and a unified development experience.
+
+## 1. Core Principles
+
+- **Single Source of Truth:** Maintain a single, reliable source for your application's state. Avoid duplicating state across components.
+- **Unidirectional Data Flow:** Data should flow in one direction through your application. This makes it easier to track changes and debug issues.
+- **Immutability:** Prefer immutable data structures. Changes to state should create new objects rather than modifying existing ones.
+- **Separation of Concerns:** Keep state management logic separate from Angular Material component implementation details. This improves testability and reusability.
+- **Observable State:** Use Observables to represent application state. This enables reactive updates and efficient change detection.
+
+## 2. State Management Approaches
+
+Choosing the right approach is crucial for scalable and maintainable applications.
+
+### 2.1 Local Component State
+
+#### Standard
+
+- Use local component state for UI-specific concerns that _do not_ need to be shared across components or persist beyond the component's lifecycle. This includes managing the "open" or "closed" state of a dialog, the selected tab in a "mat-tab-group", or the temporary state of a single form.
+
+#### Do This
+
+"""typescript
+import { Component } from '@angular/core';
+
+@Component({
+selector: 'app-example',
+template: "
+<mat-expansion-panel (opened)="panelOpenState = true"
+(closed)="panelOpenState = false">
+<mat-expansion-panel-header>
+<mat-panel-title>
+Panel
+</mat-panel-title>
+</mat-expansion-panel-header>
+
+<p>Content</p>
+</mat-expansion-panel>
+",
+})
+export class ExampleComponent {
+panelOpenState = false;
+}
+"""
+
+#### Don't Do This
+
+- Don't use local component state to manage data that needs to be shared between components or that you want to persist across route changes. This can quickly lead to inconsistent state.
+- Don't use "@Input()" bindings as primary sources of truth. They are for receiving data, not managing it internally.
+
+#### Why This Matters
+
+- **Simplicity:** Local state avoids the overhead of more complex state management solutions for simple UI interactions.
+- **Performance:** Directly manipulating component properties is more performant than dispatching actions and waiting for state updates for trivial UI changes.
+
+### 2.2 Services with RxJS (Recommended for Small to Medium Applications)
+
+#### Standard
+
+- Encapsulate related pieces of application state within a service.
+- Use an RxJS "BehaviorSubject" (or "ReplaySubject" if history is needed) to hold the current state.
+- Expose the state as an "Observable" using ".asObservable()" to prevent direct modification from components.
+- Provide methods in the service to update the state. These methods should be the _only_ way to modify the state.
+- Services should be kept as pure as possible, with side-effects such as API calls delegated to side-effect handlers.
+- Services should be "@Injectable({ providedIn: 'root' })" unless a more limited scope is explicitly required.
+
+#### Do This
+
+"""typescript
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+interface User {
+id: number;
+name: string;
+// ... potentially more user properties
+}
+
+@Injectable({
+providedIn: 'root'
+})
+export class UserService {
+private readonly \_users = new BehaviorSubject<User[]>([]);
+readonly users$: Observable<User[]> = this.\_users.asObservable();
+
+private users: User[] = []; // Private backing field
+
+constructor() {
+// Simulate loading users (in a real app, this would be an API call)
+setTimeout(() => {
+this.users = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }];
+this.\_users.next([...this.users]); // Update the BehaviorSubject
+}, 500);
+}
+
+addUser(newUser: User): void {
+this.users = [...this.users, newUser];
+this.\_users.next([...this.users]);
+}
+
+updateUser(updatedUser: User): void {
+this.users = this.users.map(user => user.id === updatedUser.id ? updatedUser : user);
+this.\_users.next([...this.users]);
+}
+
+deleteUser(userId: number): void {
+this.users = this.users.filter(user => user.id !== userId);
+this.\_users.next([...this.users]);
+}
+}
+"""
+
+##### Consuming the Service in a Component:
+
+"""typescript
+import { Component, OnInit } from '@angular/core';
+import { UserService } from './user.service';
+import { Observable } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table'; // Example use of a Material component
+
+@Component({
+selector: 'app-user-list',
+template: "
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<!-- Columns -->
+<ng-container matColumnDef="id">
+<th mat-header-cell *matHeaderCellDef> ID </th>
+<td mat-cell *matCellDef="let element"> {{element.id}} </td>
+</ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+",
+styleUrls: ['./user-list.component.css']
+})
+export class UserListComponent implements OnInit {
+
+users$: Observable<User[]>;
+dataSource: MatTableDataSource<User>;
+displayedColumns: string[] = ['id', 'name']; // Columns for the Material table
+
+constructor(private userService: UserService) {
+this.users$ = this.userService.users$; // Get the observable of users
+this.dataSource = new MatTableDataSource<User>([]); // Initialize data source for Material Table.
+}
+
+ngOnInit(): void {
+this.users$.subscribe(users => {
+this.dataSource.data = users; // Update the Material Table's data source
+});
+
+}
+}
+"""
+
+#### Don't Do This
+
+- Don't directly modify the "BehaviorSubject"'s value from outside the service (hence the ".asObservable()").
+- Avoid performing complex logic or transformations directly within the component's template using pipes. This decreases performance and makes debugging difficult. Instead, transform the data in the component or service.
+- Do not subscribe directly in the template using the "async" pipe when you only need the _current_ value once. It is more efficient in those cases to subscribe in the component and get the value into a local property.
+- Don't inject application services into other application services without careful consideration of dependencies and potential circular references. Use factory functions to create instances with dependencies, or use the "forwardRef" token to break circular dependencies if absolutely necessary.
+
+#### Why This Matters
+
+- **Centralized State:** Enforces a single source of truth for user data.
+- **Reactivity:** Components react automatically to changes in the user list.
+- **Testability:** Easier to test the "UserService" in isolation.
+- **Maintainability:** Clear separation of concerns makes the code easier to understand and modify.
+- **Integration with Angular Material:** Easily bind data from the service to Angular Material components like "mat-table".
+
+### 2.3 NgRx (Recommended for Large, Complex Applications)
+
+#### Standard
+
+- Use NgRx when your application requires complex state management, handling side effects, or benefits significantly from predictable state changes and time-travel debugging. This typically applies to larger applications with multiple features that share data and complex interactions.
+- Follow the NgRx architecture:
+  - **State:** Define the state of your application using interfaces or classes.
+  - **Actions:** Represent events that trigger state changes.
+  - **Reducers:** Pure functions that take the current state and an action, and return the _new_ state.
+  - **Selectors:** Functions that extract specific pieces of data from the state.
+  - **Effects:** Handle side effects such as API calls.
+  - **Store:** The central data store that holds the application state.
+- Use the NgRx CLI schematics to generate boilerplate code.
+- Use the "OnPush" change detection strategy in components that consume state from the store.
+
+#### Do This
+
+##### Defining State
+
+"""typescript
+// src/app/state/user.state.ts
+import { User } from '../models/user.model';
+
+export interface UserState {
+users: User[];
+loading: boolean;
+error: string | null;
+}
+
+export const initialState: UserState = {
+users: [],
+loading: false,
+error: null
+};
+"""
+
+##### Defining Actions
+
+"""typescript
+// src/app/state/user.actions.ts
+import { createAction, props } from '@ngrx/store';
+import { User } from '../models/user.model';
+
+export const loadUsers = createAction('[User] Load Users');
+export const loadUsersSuccess = createAction('[User] Load Users Success', props<{ users: User[] }>());
+export const loadUsersFailure = createAction('[User] Load Users Failure', props<{ error: string }>());
+export const addUser = createAction('[User] Add User', props<{ user: User }>());
+// More actions for update, delete, etc.
+"""
+
+##### Defining Reducers
+
+"""typescript
+// src/app/state/user.reducer.ts
+import { createReducer, on } from '@ngrx/store';
+import { initialState, UserState } from './user.state';
+import \* as UserActions from './user.actions';
+
+export const userReducer = createReducer(
+initialState,
+on(UserActions.loadUsers, (state) => ({ ...state, loading: true })),
+on(UserActions.loadUsersSuccess, (state, { users }) => ({ ...state, users: users, loading: false, error: null })),
+on(UserActions.loadUsersFailure, (state, { error }) => ({ ...state, loading: false, error: error })),
+on(UserActions.addUser, (state, { user }) => ({ ...state, users: [...state.users, user] }))
+// More reducers for other actions
+);
+"""
+
+##### Defining Effects
+
+"""typescript
+// src/app/state/user.effects.ts
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { UserService } from '../user.service';
+import \* as UserActions from './user.actions';
+import { catchError, map, mergeMap, of } from 'rxjs';
+
+@Injectable()
+export class UserEffects {
+
+loadUsers$ = createEffect(() => this.actions$.pipe(
+ofType(UserActions.loadUsers),
+mergeMap(() => this.userService.getUsers() // Assume a getUsers method exists in your UserService
+.pipe(
+map(users => UserActions.loadUsersSuccess({ users })),
+catchError(error => of(UserActions.loadUsersFailure({ error: error.message })))
+)
+)
+));
+
+constructor(private actions$: Actions, private userService: UserService) {}
+}
+"""
+
+##### Defining Selectors
+
+"""typescript
+// src/app/state/user.selectors.ts
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { UserState } from './user.state';
+
+export const selectUserState = createFeatureSelector<UserState>('user'); // 'user' is the feature key in combineReducers
+
+export const selectUsers = createSelector(selectUserState, (state: UserState) => state.users);
+export const selectUserLoading = createSelector(selectUserState, (state: UserState) => state.loading);
+export const selectUserError = createSelector(selectUserState, (state: UserState) => state.error);
+"""
+
+##### Consuming state in a Component
+
+"""typescript
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
+import _ as UserActions from '../state/user.actions';
+import _ as UserSelectors from '../state/user.selectors';
+import { MatTableDataSource } from '@angular/material/table';
+
+@Component({
+selector: 'app-user-list',
+template: "
+
+<div class="container">
+<mat-spinner *ngIf="loading$ | async"></mat-spinner>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<!-- Define columns similarly to the UserService example -->
+<ng-container matColumnDef="id">
+<th mat-header-cell *matHeaderCellDef> ID </th>
+<td mat-cell \*matCellDef="let element"> {{element.id}} </td>
+</ng-container>
+
+       <ng-container matColumnDef="name">
+         <th mat-header-cell *matHeaderCellDef> Name </th>
+         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+       </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <div *ngIf="error$ | async as error">Error: {{error}}</div>
+
+",
+changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class UserListComponent implements OnInit {
+users$: Observable<User[]>;
+  loading$: Observable<boolean>;
+error$: Observable<string | null>;
+dataSource: MatTableDataSource<User>;
+displayedColumns: string[] = ['id', 'name'];
+
+constructor(private store: Store) {
+this.users$ = this.store.select(UserSelectors.selectUsers);
+this.loading$ = this.store.select(UserSelectors.selectUserLoading);
+this.error$ = this.store.select(UserSelectors.selectUserError);
+this.dataSource = new MatTableDataSource<User>([]); // Initialize data source for Material Table.
+}
+
+ngOnInit(): void {
+this.store.dispatch(UserActions.loadUsers()); // Dispatch the action to load users
+
+    this.users$.subscribe(users => {
+           this.dataSource.data = users;  // Update the Material Table's data source
+     });
+
+}
+}
+"""
+
+##### AppModule setup
+
+"""typescript
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'; // For debugging
+import { userReducer } from './state/user.reducer';
+import { UserEffects } from './state/user.effects'; // Import your UserEffects
+import { environment } from '../environments/environment'; // Import environment.ts
+
+@NgModule({
+imports: [
+BrowserModule,
+StoreModule.forRoot({ user: userReducer }), // Register the userReducer under the 'user' feature key
+EffectsModule.forRoot([UserEffects]), // Register the UserEffects
+
+    // Only add StoreDevtoolsModule in development
+    environment.production ? [] : StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+    })
+
+],
+declarations: [ /* Your components */ ],
+bootstrap: [ /* Your root component */ ]
+})
+export class AppModule { }
+"""
+
+#### Don't Do This
+
+- Don't skip defining actions and directly dispatch anonymous objects to the store. This makes debugging and tracking state changes difficult.
+- Don't perform API calls directly within reducers. Reducers must be pure functions.
+- Don't mutate the state directly within reducers; always return a new state object. Spread operator ("...") is your friend.
+- Don't select the entire state object when you only need a small portion of it. This can trigger unnecessary change detection cycles. Use memoized selectors (using "createSelector") for derived data.
+
+#### Why This Matters
+
+- **Predictable State:** State changes are triggered by actions, making debugging and testing easier.
+- **Centralized State:** All application state is managed in a single store.
+- **Scalability:** Well-suited for large, complex applications.
+- **Debugging:** NgRx DevTools provides time-travel debugging capabilities.
+- **Performance:** "OnPush" change detection minimizes unnecessary re-renders.
+- **Testability:** Reducers and effects are easily testable in isolation.
+
+### 2.4 Akita (Alternative to NgRx, Simpler Setup)
+
+#### Standard
+
+- Consider Akita for a simpler, more straightforward state management solution compared to NgRx, especially if you are working in a team less experienced with Redux-style architectures.
+- Akita uses entities stores and queries, making it easier to manage collections of data.
+- Leverage Akita's built-in immutability and optimistic updates.
+
+#### Do This
+
+##### Defining an Entity State
+
+"""typescript
+// src/app/state/user.state.ts
+import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
+import { Injectable } from '@angular/core';
+
+export interface User {
+id: number;
+name: string;
+// ... other properties
+}
+
+export interface UserState extends EntityState<User> {}
+
+@Injectable({ providedIn: 'root' })
+@StoreConfig({ name: 'users' }) // A unique name for the store
+export class UserStore extends EntityStore<UserState, User> {
+constructor() {
+super();
+}
+}
+"""
+
+##### Defining a Query
+
+"""typescript
+// src/app/state/user.query.ts
+import { Injectable } from '@angular/core';
+import { QueryEntity } from '@datorama/akita';
+import { UserStore, UserState, User } from './user.store';
+import { Observable } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class UserQuery extends QueryEntity<UserState, User> {
+constructor(protected store: UserStore) {
+super(store);
+}
+
+selectLoading$: Observable<boolean> = this.selectLoading(); // Built-in loading selector
+}
+"""
+
+##### Updating the Store and Using the Query
+
+"""typescript
+// src/app/user.service.ts
+import { Injectable } from '@angular/core';
+import { UserStore, User } from './state/user.store';
+import { HttpClient } from '@angular/common/http'; // Example of using HTTP
+
+@Injectable({ providedIn: 'root' })
+export class UserService {
+
+constructor(private userStore: UserStore, private http: HttpClient) {}
+
+getUsers() {
+this.userStore.setLoading(true); // Set loading state
+
+    this.http.get<User[]>('/api/users') // Replace with your API endpoint
+      .subscribe(users => {
+        this.userStore.set(users); // Set the users in the store
+        this.userStore.setLoading(false); // Reset loading state
+      }, error => {
+        // Handle error
+        this.userStore.setLoading(false);
+      });
+
+}
+
+addUser(user: User) {
+this.userStore.add(user);
+}
+
+updateUser(id: number, user: Partial<User>) {
+this.userStore.update(id, user);
+}
+
+removeUser(id: number) {
+this.userStore.remove(id);
+}
+}
+"""
+
+##### Consuming State in a Component
+
+"""typescript
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Observable } from 'rxjs';
+import { User } from './state/user.store';
+import { UserQuery } from './state/user.query';
+import { UserService } from './user.service'; // Import UserService
+import { MatTableDataSource } from '@angular/material/table';
+
+@Component({
+selector: 'app-user-list',
+template: "
+
+<div class="container">
+<mat-spinner *ngIf="loading$ | async"></mat-spinner>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<!-- Define columns similarly to the UserService example -->
+<ng-container matColumnDef="id">
+<th mat-header-cell *matHeaderCellDef> ID </th>
+<td mat-cell \*matCellDef="let element"> {{element.id}} </td>
+</ng-container>
+
+             <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+             </ng-container>
+
+             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      <div *ngIf="loading$ | async">Loading...</div>
+      <ul>
+        <li *ngFor="let user of users$ | async">{{ user.name }}</li>
+      </ul>
+    </div>
+
+",
+changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserListComponent implements OnInit {
+users$: Observable<User[]>;
+  loading$: Observable<boolean>;
+dataSource: MatTableDataSource<User>;
+displayedColumns: string[] = ['id', 'name'];
+
+constructor(private userQuery: UserQuery, private userService: UserService) {
+this.users$ = this.userQuery.selectAll();
+this.loading$ = this.userQuery.selectLoading$;
+this.dataSource = new MatTableDataSource<User>([]);
+}
+
+ngOnInit() {
+this.users$.subscribe(users => {
+this.dataSource.data = users;
+});
+
+        this.userService.getUsers();  // Load users on init via the service
+
+}
+}
+"""
+
+#### Don't Do This
+
+- Don't modify state directly using "store.update()" without considering optimistic updates or error handling.
+- Avoid creating too many stores. Group related entities into a single store where appropriate.
+
+#### Why This Matters
+
+- **Simplicity:** Easier to learn and implement compared to NgRx.
+- **Entity Management:** Simplifies managing collections of data.
+- **Boilerplate Reduction:** Requires less boilerplate code than NgRx.
+- **Optimistic Updates:** Built-in support for optimistic updates.
+
+## 3. Angular Material Specific Considerations
+
+Angular Material components often involve managing internal state for UI interactions.
+
+### 3.1 Dialogs ("MatDialog")
+
+#### Standard
+
+- When passing data to a dialog, use the "data" configuration option of "MatDialogConfig".
+- Make the dialog component responsible for managing its own form state and validation.
+- Return data from the dialog using the "MatDialogRef.close()" method.
+- Consume the data returned from the dialog using "MatDialogRef.afterClosed()".
+
+#### Do This
+
+##### Opening Dialog
+
+"""typescript
+import { MatDialog } from '@angular/material/dialog';
+import { UserEditDialogComponent } from './user-edit-dialog.component';
+
+@Component({
+selector: 'app-user-profile',
+template: "
+<button mat-raised-button (click)="openEditDialog()">Edit Profile</button>
+"
+})
+export class UserProfileComponent {
+constructor(public dialog: MatDialog) {}
+
+openEditDialog(): void {
+const dialogRef = this.dialog.open(UserEditDialogComponent, {
+width: '400px',
+data: { name: 'John Doe', email: 'john.doe@example.com' } // Initial data
+});
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result) {
+        console.log('Dialog result:', result); // Updated data from the dialog
+      }
+    });
+
+}
+}
+"""
+
+##### Dialog Component
+
+"""typescript
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+@Component({
+selector: 'app-user-edit-dialog',
+template: "
+
+<h1 mat-dialog-title>Edit Profile</h1>
+<div mat-dialog-content>
+<form [formGroup]="form">
+<mat-form-field appearance="fill">
+<mat-label>Name</mat-label>
+<input matInput formControlName="name">
+</mat-form-field>
+<mat-form-field appearance="fill">
+<mat-label>Email</mat-label>
+<input matInput formControlName="email">
+</mat-form-field>
+</form>
+</div>
+<div mat-dialog-actions>
+<button mat-button (click)="onNoClick()">Cancel</button>
+<button mat-button [mat-dialog-close]="form.value" cdkFocusInitial [disabled]="form.invalid">Save</button>
+</div>
+"
+})
+export class UserEditDialogComponent {
+form: FormGroup;
+
+constructor(
+public dialogRef: MatDialogRef<UserEditDialogComponent>,
+@Inject(MAT_DIALOG_DATA) public data: any,
+private fb: FormBuilder
+) {
+this.form = this.fb.group({
+name: [data.name, Validators.required],
+email: [data.email, [Validators.required, Validators.email]]
+});
+}
+
+onNoClick(): void {
+this.dialogRef.close();
+}
+}
+"""
+
+#### Don't Do This
+
+- Don't directly modify the parent component's state from within the dialog. Use the "MatDialogRef.close()" method to return data.
+- Don't pass complex objects or services directly into the "data" property. This can lead to dependency injection issues.
+
+#### Why This Matters
+
+- **Encapsulation:** Dialog component manages its own state, keeping concerns separate.
+- **Testability:** Dialog component is easily testable in isolation.
+- **Data Integrity:** Ensures data is validated before being passed back to the parent component.
+
+### 3.2 Tables ("MatTable")
+
+#### Standard
+
+- Use "MatTableDataSource" to manage the data source for "MatTable".
+- Use "MatSort" and "MatPaginator" to provide sorting and pagination functionality.
+- Implement custom data access logic in a separate service.
+- Leverage "trackBy" function for performance optimisation.
+
+#### Do This
+
+"""typescript
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { UserService } from '../user.service'; // Assuming you have a UserService
+
+export interface UserData {
+id: string;
+name: string;
+progress: string;
+fruit: string;
+}
+
+/\*_ Constants used to fill up our data base. _/
+const FRUITS: string[] = [
+'apple', 'orange', 'banana', 'melon', 'grape', 'kiwi', 'mango',
+];
+const NAMES: string[] = [
+'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
+'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
+'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas',
+'Elizabeth',
+];
+
+@Component({
+selector: 'app-table-example',
+styleUrls: ['table-example.css'],
+templateUrl: 'table-example.html',
+})
+export class TableExample implements OnInit {
+displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
+dataSource: MatTableDataSource<UserData>;
+
+@ViewChild(MatPaginator) paginator: MatPaginator;
+@ViewChild(MatSort) sort: MatSort;
+
+constructor(private userService: UserService) {
+// Create 100 users
+const users = Array.from({length: 100}, (\_, k) => createNewUser(k + 1));
+
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource(users);
+
+}
+
+ngOnInit() {
+this.dataSource.paginator = this.paginator;
+this.dataSource.sort = this.sort;
+}
+
+applyFilter(event: Event) {
+const filterValue = (event.target as HTMLInputElement).value;
+this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+
+}
+}
+
+/\*_ Builds and returns a new User. _/
+function createNewUser(id: number): UserData {
+const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
+NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+
+return {
+id: id.toString(),
+name: name,
+progress: Math.round(Math.random() _ 100).toString(),
+fruit: FRUITS[Math.round(Math.random() _ (FRUITS.length - 1))]
+};
+}
+"""
+
+"""html
+<mat-form-field appearance="standard">
+<mat-label>Filter</mat-label>
+<input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <!-- Progress Column -->
+    <ng-container matColumnDef="progress">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
+      <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
+    </ng-container>
+
+    <!-- Fruit Column -->
+    <ng-container matColumnDef="fruit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fruit </th>
+      <td mat-cell *matCellDef="let row"> {{row.fruit}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+</div>
+"""
+
+#### Don't Do This
+
+- Don't directly manipulate the DOM to update table data. Use "MatTableDataSource".
+- Don't perform complex data transformations directly in the template. Do this at Service level.
+
+#### Why This Matters
+
+- **Performance:** "MatTableDataSource" optimizes data rendering and change detection.
+- **Sorting and Pagination:** Provides built-in sorting and pagination functionality.
+- **Maintainability:** Separates data access logic from the component.
+
+### 3.3 Autocomplete ("MatAutocomplete")
+
+#### Standard
+
+- Use reactive forms to bind the autocomplete input to a data source asynchronously.
+- Use the "displayWith" property to control how the selected option is displayed in the input field.
+- Debounce input events to prevent excessive API calls.
+
+#### Do This
+
+"""typescript
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { startWith, map, debounceTime } from 'rxjs/operators';
+
+export interface User {
+name: string;
+}
+
+@Component({
+selector: 'app-autocomplete-example',
+template: "
+<mat-form-field appearance="fill">
+<mat-label>Select a user</mat-label>
+<input type="text" matInput [formControl]="userControl" [matAutocomplete]="auto">
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+<mat-option \*ngFor="let user of filteredUsers$ | async" [value]="user">
+{{user.name}}
+</mat-option>
+</mat-autocomplete>
+</mat-form-field>
+"
+})
+export class AutocompleteExample implements OnInit {
+userControl = new FormControl('');
+users: User[] = [
+{name: 'Alice'},
+{name: 'Bob'},
+{name: 'Charlie'}
+];
+filteredUsers$: Observable<User[]>;
+
+ngOnInit() {
+this.filteredUsers$ = this.userControl.valueChanges.pipe(
+startWith(''),
+debounceTime(300), // Debounce for 300ms
+map(value => (typeof value === 'string' ? value : value.name)),
+map(name => (name ? this.\_filter(name) : this.users.slice())),
+);
+}
+
+displayFn(user: User): string {
+return user && user.name ? user.name : '';
+}
+
+private \_filter(name: string): User[] {
+const filterValue = name.toLowerCase();
+return this.users.filter(user => user.name.toLowerCase().includes(filterValue));
+}
+}
+"""
+
+#### Don't Do This
+
+- Don't perform synchronous filtering on large datasets. Use asynchronous filtering with API calls.
+- Avoid making API calls on every input event. Use "debounceTime" to limit the number of calls.
+
+#### Why This Matters
+
+- **Asynchronous Data:** Handles large datasets
+
+# Component Design Standards for Angular
+
+This document outlines coding standards specifically for **Component Design** in Angular applications. Following these guidelines will contribute to creating reusable, maintainable, and performant Angular components. These standards are based on the latest version of Angular and incorporate modern best practices.
+
+## 1. Component Structure and Organization
+
+### 1.1. Component Directory Structure
+
+**Do This:** Organize components into feature-specific directories. Each component directory should contain the component's TypeScript file, HTML template, CSS/SCSS stylesheet, and any related test files.
+
+**Why:** Clear directory structure improves code discoverability and maintainability, especially in large projects.
+
+"""
+src/app/
+├── feature-module/
+│ ├── component-a/
+│ │ ├── component-a.component.ts
+│ │ ├── component-a.component.html
+│ │ ├── component-a.component.scss
+│ │ └── component-a.component.spec.ts
+│ ├── component-b/
+│ │ ├── component-b.component.ts
+│ │ ├── component-b.component.html
+│ │ ├── component-b.component.scss
+│ │ └── component-b.component.spec.ts
+│ └── feature-module.module.ts
+"""
+
+**Don't Do This:** Place all components in a single, flat directory. This makes it difficult to find and manage components as the application grows.
+
+### 1.2. Component Selector Naming
+
+**Do This:** Use a consistent naming convention for component selectors, preferably prefixed with a short application or module identifier. Use kebab-case.
+
+**Why:** Consistent naming prevents naming conflicts and makes it easy to identify which component belongs to which part of the application.
+
+"""typescript
+// Good: application-name-component-name
+@Component({
+selector: 'app-product-list',
+templateUrl: './product-list.component.html',
+styleUrls: ['./product-list.component.scss']
+})
+export class ProductListComponent { }
+"""
+
+**Don't Do This:** Use generic or inconsistent names, or names that are too long and verbose.
+
+### 1.3. Component Logic Separation
+
+**Do This:** Separate component logic into distinct concerns. Use services for data access, business logic, and shared functionality. Components should primarily handle view-related tasks.
+
+**Why:** Separation of concerns makes components more testable, reusable, and easier to understand. Single Responsibility Principle.
+
+"""typescript
+// Good: Component delegates data loading to a service
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../product.service';
+import { Product } from '../product.model';
+
+@Component({
+selector: 'app-product-list',
+templateUrl: './product-list.component.html',
+styleUrls: ['./product-list.component.scss']
+})
+export class ProductListComponent implements OnInit {
+products: Product[] = [];
+
+constructor(private productService: ProductService) { }
+
+ngOnInit(): void {
+this.productService.getProducts().subscribe(products => this.products = products);
+}
+}
+"""
+
+**Don't Do This:** Place data access logic or complex business rules directly within the component.
+
+### 1.4. Smart vs. Dumb Components (Presentational vs. Container Components)
+
+**Do This:** Differentiate between "smart" (container) components and "dumb" (presentational) components. Smart components handle data fetching and state management, while dumb components focus on rendering data and emitting events.
+
+**Why:** This pattern promotes reusability and testability. Presentational components become reusable building blocks.
+
+"""typescript
+// Dumb/Presentational Component - receives data via @Input, emits events @Output
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Product } from '../product.model';
+
+@Component({
+selector: 'app-product-card',
+templateUrl: './product-card.component.html',
+styleUrls: ['./product-card.component.scss']
+})
+export class ProductCardComponent {
+@Input() product!: Product;
+@Output() addToCart = new EventEmitter<Product>();
+
+onAddToCart() {
+this.addToCart.emit(this.product);
+}
+}
+
+// Smart/Container Component - Fetches data, manages the product list, and uses the ProductCardComponent
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../product.service';
+import { Product } from '../product.model';
+
+@Component({
+selector: 'app-product-list',
+templateUrl: './product-list.component.html',
+styleUrls: ['./product-list.component.scss']
+})
+export class ProductListComponent implements OnInit {
+products: Product[] = [];
+
+constructor(private productService: ProductService) { }
+
+ngOnInit(): void {
+this.productService.getProducts().subscribe(products => this.products = products);
+}
+
+onAddToCart(product: Product) {
+// Logic to add product to cart (e.g., using a cart service)
+console.log("Adding ${product.name} to cart");
+}
+}
+"""
+
+**Don't Do This:** Create components that are responsible for both data fetching and rendering, making them tightly coupled and difficult to reuse.
+
+## 2. Component Inputs and Outputs
+
+### 2.1. Use of "@Input()" and "@Output()" Decorators
+
+**Do This:** Clearly define component inputs using the "@Input()" decorator and outputs using the "@Output()" decorator. Use strong typing for input and output properties.
+
+**Why:** Explicitly defining inputs and outputs improves code clarity, prevents unexpected behavior, and enables better tooling support.
+
+"""typescript
+// Good
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+selector: 'app-my-component',
+template: "
+<p>{{ myInput }}</p>
+<button (click)="myOutput.emit('Hello from child!')">Click me</button>
+"
+})
+export class MyComponent {
+@Input() myInput!: string; // Non-null assertion operator. Ensure you are providing a value.
+@Output() myOutput = new EventEmitter<string>();
+}
+"""
+
+**Don't Do This:** Rely on implicit input properties or use string-based event names.
+
+### 2.2. Input Property Transformations
+
+**Do This:** If input properties require transformation, perform the transformation within the component using a setter or the "ngOnChanges" lifecycle hook.
+
+**Why:** Keeping transformation logic within the component ensures data consistency and prevents unexpected behavior.
+
+"""typescript
+// Good: Using a setter to transform input
+import { Component, Input } from '@angular/core';
+
+@Component({
+selector: 'app-display-name',
+template: "<p>Formatted Name: {{ formattedName }}</p>",
+})
+export class DisplayNameComponent {
+private \_name: string = '';
+formattedName: string = '';
+
+@Input()
+set name(name: string) {
+this.\_name = name;
+this.formattedName = this.\_formatName(name);
+}
+get name(): string { return this.\_name; }
+
+private \_formatName(name: string): string {
+return name.toUpperCase(); // Example formatting
+}
+}
+
+"""
+
+**Don't Do This:** Modify input properties directly without considering potential side effects or data binding issues.
+
+### 2.3. Output Event Payload Typing
+
+**Do This:** Always type the payload of output events. This adds type safety, making it easier to handle the event data in the parent component.
+
+**Why:** Provides compile-time error checking and clarifies the structure of the emitted data.
+
+"""typescript
+import { Component, Output, EventEmitter } from '@angular/core';
+
+interface Task {
+id: number;
+description: string;
+completed: boolean;
+}
+
+@Component({
+selector: 'app-task-item',
+template: "<button (click)="completeTask.emit(task)">Complete</button>",
+})
+export class TaskItemComponent {
+task: Task = { id: 1, description: 'Example Task', completed: false}; // Dummy task for demonstration
+
+@Output() completeTask = new EventEmitter<Task>();
+}
+"""
+
+**Don't Do This:** Emit events without a specified payload type, potentially leading to type errors and runtime issues.
+
+## 3. Component Templates (HTML)
+
+### 3.1. Template Readability
+
+**Do This:** Format HTML templates consistently for readability. Use proper indentation, line breaks, and comments to explain complex logic. Keep templates concise and focused on presentation. Delegate heavy logic to the component class.
+
+**Why:** Readable templates are easier to understand and maintain.
+
+"""html
+
+<!-- Good -->
+<div class="product-card">
+  <img [src]="product.imageUrl" alt="{{ product.name }}">
+  <h3>{{ product.name }}</h3>
+  <p>{{ product.description }}</p>
+  <button (click)="onAddToCart()">Add to Cart</button>
+</div>
+"""
+
+**Don't Do This:** Write excessively long or complex templates with minimal formatting.
+
+### 3.2. Avoiding Logic in Templates
+
+**Do This:** Minimize complex logic within templates. Use template variables, pipe transformations, and method calls in the component class rather than complex expressions in the template.
+
+**Why:** Simplifies templates, improving readability and testability.
+
+"""typescript
+// Good: Moving formatting logic to the component
+import { Component } from '@angular/core';
+
+@Component({
+selector: 'app-date-display',
+template: "<p>{{ formattedDate }}</p>",
+})
+export class DateDisplayComponent {
+today = new Date();
+formattedDate = this.formatDate(this.today);
+
+formatDate(date: Date): string {
+return date.toLocaleDateString(); //Formatting is handled in the component
+}
+}
+
+//Bad: overly complex logic inside of a template.
+//<p>{{ today.toLocaleDateString() }}</p> // Date formatting directly in template
+"""
+
+**Don't Do This:** Perform heavy calculations, data manipulations, or complex conditional logic directly within the template.
+
+### 3.3. Security: Preventing Cross-Site Scripting (XSS)
+
+**Do This:** Sanitize any dynamically generated content before rendering it in the template. Use Angular's built-in "DomSanitizer" to prevent XSS attacks.
+
+**Why:** Essential for preventing malicious code injection into your application through user-provided data.
+
+"""typescript
+import { Component, SecurityContext } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+@Component({
+selector: 'app-safe-content',
+template: "<div [innerHTML]="safeHtml"></div>",
+})
+export class SafeContentComponent {
+unsafeHtml = '<img src="x" onerror="alert(\'XSS\')" />';
+safeHtml: SafeHtml;
+
+constructor(private sanitizer: DomSanitizer) {
+//Sanitize on initialization.
+this.safeHtml = this.sanitizer.sanitize(SecurityContext.HTML, this.unsafeHtml) || '';
+}
+}
+"""
+
+**Don't Do This:** Directly render user-provided content without sanitization. This presents a severe security risk. Avoid bypassing sanitization unless absolutely necessary and with extreme caution and justification.
+
+### 3.4. Using "trackBy" with "\*ngFor"
+
+**Do This:** Use the "trackBy" function with "\*ngFor" to improve rendering performance for dynamic lists, especially when dealing with large datasets. "trackBy" allows Angular to only re-render items that have changed, rather than the entire list.
+
+**Why:** Reduces DOM manipulations and significantly improves rendering performance in dynamic lists.
+
+"""typescript
+// Good
+import { Component } from '@angular/core';
+
+interface Item {
+id: number;
+name: string;
+}
+
+@Component({
+selector: 'app-list-display',
+template: "
+<ul>
+<li \*ngFor="let item of items; trackBy: trackById">
+{{ item.name }}
+</li>
+</ul>
+",
+})
+export class ListDisplayComponent {
+items: Item[] = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
+
+trackById(index: number, item: Item): number {
+return item.id;
+}
+}
+"""
+
+**Don't Do This:** Skip "trackBy" when rendering large or frequently updated lists.
+
+## 4. Component Styles (CSS/SCSS)
+
+### 4.1. Component-Specific Styles
+
+**Do This:** Scope styles to components using component-specific CSS/SCSS files. Use the "encapsulation: ViewEncapsulation.Emulated" (default) or "encapsulation: ViewEncapsulation.ShadowDom" view encapsulation strategies to prevent style bleed.
+
+**Why:** Prevents styling conflicts and ensures that component styles are isolated.
+
+"""typescript
+// Good
+import { Component, ViewEncapsulation } from '@angular/core';
+
+@Component({
+selector: 'app-styled-component',
+templateUrl: './styled-component.component.html',
+styleUrls: ['./styled-component.component.scss'],
+encapsulation: ViewEncapsulation.Emulated // Or ShadowDom
+})
+export class StyledComponent { }
+"""
+
+**Don't Do This:** Rely on global styles for component-specific styling unless absolutely necessary. Avoid "ViewEncapsulation.None" unless you have a very specific reason and understand the implications.
+
+### 4.2. CSS/SCSS Naming Conventions
+
+**Do This:** Use a consistent naming convention for CSS classes and selectors. BEM (Block Element Modifier) is a popular and effective choice.
+
+**Why:** Consistent naming improves code readability and prevents CSS conflicts.
+
+"""scss
+/_ Good: Using BEM _/
+.product-card { /_ Block _/
+&\_\_image { /_ Element _/
+width: 100%;
+}
+
+&\_\_title { /_ Element _/
+font-size: 1.2em;
+}
+
+&--featured { /_ Modifier _/
+border: 2px solid blue;
+}
+}
+"""
+
+**Don't Do This:** Use unclear, generic, or inconsistent class names.
+
+### 4.3. Stylelint
+
+**Do This:** Integrate Stylelint into your build process to enforce CSS/SCSS coding standards.
+
+**Why:** Stylelint automates the process of enforcing coding standards, ensuring consistent styling across the application.
+
+"""json
+// Example Stylelint configuration (.stylelintrc.json)
+{
+"extends": "stylelint-config-standard",
+"rules": {
+"indentation": 2, // Enforce 2-space indentation
+"selector-class-pattern": "^[a-z][a-zA-Z0-9]+$", // Example: enforce lowerCamelCase
+"no-duplicate-selectors": true
+}
+}
+"""
+
+**Don't Do This:** Ignore CSS/SCSS coding standards or rely solely on manual code reviews.
+
+## 5. Component Lifecycle Hooks
+
+### 5.1. Understanding Lifecycle Hooks
+
+**Do This:** Understand the purpose and execution order of Angular lifecycle hooks. Use them appropriately for tasks like initialization, data binding, and cleanup.
+
+**Why:** Correct use of lifecycle hooks ensures proper component behavior and prevents memory leaks.
+
+"""typescript
+import { Component, OnInit, OnDestroy, OnChanges , Input, SimpleChanges} from '@angular/core';
+import { Subscription } from 'rxjs';
+
+@Component({
+selector: 'app-lifecycle-example',
+template: "<p>Value: {{ value }}</p>",
+})
+export class LifecycleExampleComponent implements OnInit, OnDestroy, OnChanges {
+@Input() inputValue!: string; //Non-null assertion operator
+
+value: string = '';
+private subscription!: Subscription; //Non-null assertion operator
+
+constructor() {
+console.log('Constructor called');
+}
+
+ngOnChanges(changes: SimpleChanges): void {
+console.log('ngOnChanges called', changes);
+if (changes['inputValue']) {
+this.value = changes['inputValue'].currentValue;
+}
+}
+
+ngOnInit(): void {
+console.log('ngOnInit called');
+
+    // Example: Subscribing to an observable
+    // this.subscription = this.myService.getData().subscribe(data => {
+    //   this.value = data;
+    // });
+
+}
+
+ngOnDestroy(): void {
+console.log('ngOnDestroy called');
+
+    //Unsubscribe to prevent memory leaks
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+
+}
+}
+"""
+
+**Don't Do This:** Perform heavy operations in every lifecycle hook. Avoid using "ngOnDestroy" to unsubscribe from subscriptions or clean up resources.
+
+### 5.2. Unsubscribing from Observables
+
+**Do This:** Always unsubscribe from observables in the "ngOnDestroy" lifecycle hook to prevent memory leaks, especially when dealing with long-lived subscriptions. Use the "takeUntil" operator to automatically unsubscribe when the component is destroyed.
+
+**Why:** Failure to unsubscribe can lead to memory leaks and performance degradation.
+
+"""typescript
+import { interval, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+@Component({
+selector: 'app-unsubscribe-example',
+template: "<p>Value: {{ value }}</p>",
+})
+export class UnsubscribeExampleComponent implements OnInit, OnDestroy {
+value: number = 0;
+private destroy$ = new Subject<void>();
+
+ngOnInit() {
+interval(1000)
+.pipe(takeUntil(this.destroy$))
+.subscribe(val => this.value = val);
+}
+
+ngOnDestroy() {
+this.destroy$.next();
+    this.destroy$.complete();
+}
+}
+"""
+
+**Don't Do This:** Forget to unsubscribe from observables, particularly inside services or components that persist for a long time.
+
+## 6. Component Testing
+
+### 6.1. Unit Testing
+
+**Do This:** Write unit tests for each component to verify its behavior in isolation. Test input/output bindings, template rendering, and event handling.
+
+**Why:** Unit tests ensure that components function correctly and prevent regressions.
+
+"""typescript
+// Good: Example Jasmine/Karma test
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MyComponent } from './my.component';
+
+describe('MyComponent', () => {
+let component: MyComponent;
+let fixture: ComponentFixture<MyComponent>;
+
+beforeEach(async () => {
+await TestBed.configureTestingModule({
+declarations: [ MyComponent ]
+})
+.compileComponents();
+});
+
+beforeEach(() => {
+fixture = TestBed.createComponent(MyComponent);
+component = fixture.componentInstance;
+fixture.detectChanges();
+});
+
+it('should create', () => {
+expect(component).toBeTruthy();
+});
+
+it('should display the input value', () => {
+component.myInput = 'Test Input';
+fixture.detectChanges();
+const compiled = fixture.nativeElement;
+expect(compiled.querySelector('p').textContent).toContain('Test Input');
+});
+});
+"""
+
+**Don't Do This:** Skip unit testing for components, especially those with complex logic or user interactions.
+
+### 6.2 Mocking Dependencies
+
+**Do This:** Mock dependencies (e.g., services) when testing components to isolate the component under test.
+
+**Why:** Mocking ensures that tests are fast, deterministic, and focused on the component's behavior, not the behavior of its dependencies.
+
+"""typescript
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ProductListComponent } from './product-list.component';
+import { ProductService } from '../product.service';
+import { of } from 'rxjs';
+
+describe('ProductListComponent', () => {
+let component: ProductListComponent;
+let fixture: ComponentFixture<ProductListComponent>;
+let productServiceSpy: jasmine.SpyObj<ProductService>;
+
+beforeEach(async () => {
+const spy = jasmine.createSpyObj('ProductService', ['getProducts']);
+
+    await TestBed.configureTestingModule({
+      declarations: [ProductListComponent],
+      providers: [{ provide: ProductService, useValue: spy }]
+    }).compileComponents();
+
+    productServiceSpy = TestBed.inject(ProductService) as jasmine.SpyObj<ProductService>;
+
+});
+
+beforeEach(() => {
+fixture = TestBed.createComponent(ProductListComponent);
+component = fixture.componentInstance;
+
+    // Mock the getProducts method
+    productServiceSpy.getProducts.and.returnValue(of([{ id: 1, name: 'Test Product', description: 'Test'}]));
+    fixture.detectChanges();
+
+});
+
+it('should display products', () => {
+expect(component.products.length).toBe(1);
+});
+});
+"""
+
+**Don't Do This:** Rely on real backend services or databases in unit tests.
+
+## 7. Component Versioning and Deprecation
+
+### 7.1. Semantic Versioning
+
+**Do This:** Use Semantic Versioning (SemVer) for your component library. Follow SemVer guidelines for major, minor, and patch releases.
+
+**Why:** Provides clarity for consumers of your component library about the impact of updates.
+
+### 7.2. Deprecation
+
+**Do This:** When deprecating a component or feature, clearly communicate the deprecation and provide a migration path. Use "@deprecated" JSDoc tag.
+
+**Why:** Helps users to transition smoothly to new versions of your component library.
+
+"""typescript
+/\*\*
+
+- @deprecated Use NewComponent instead.
+  \*/
+  @Component({
+  selector: 'app-deprecated-component',
+  template: "<p>This component is deprecated. Use NewComponent.</p>"
+  })
+  export class DeprecatedComponent { }
+  """
+
+**Don't Do This:** Remove or change features without providing deprecation warnings or migration instructions which can lead to breaking changes.
+
+This document provides a comprehensive guide to Angular component design best practices. Consistently applying these standards will result in more robust, maintainable, and performant Angular applications. These standards should be updated and refined as the Angular ecosystem evolves.

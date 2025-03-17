@@ -1,0 +1,46 @@
+/* Angular Material theming */
+@use "@angular/material" as mat;
+
+// Include the common styles for Angular Material
+
+// $yellow-palette, $cyan-palette, $magenta-palette, $orange-palette,
+// $chartreuse-palette, $spring-green-palette, $azure-palette, $violet-palette, $rose-palette;
+
+// Create a theme
+// $ai-web-primary: mat.$azure-palette;
+// $ai-web-accent: mat.$rose-palette;
+// $ai-web-warn: mat.$yellow-palette;
+
+// // Create the theme object
+// $ai-web-theme: mat.define-light-theme((
+//   color: (
+//     primary: $ai-web-primary,
+//     accent: $ai-web-accent,
+//     warn: $ai-web-warn,
+//   )
+// ));
+
+// // Include theme styles for core and each component
+// @include mat.all-component-themes($ai-web-theme);
+
+// Base styles
+html {
+  color-scheme: light dark;
+
+
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$violet-palette,
+        tertiary: mat.$orange-palette,
+        theme-type: light,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  margin: 0;
+}

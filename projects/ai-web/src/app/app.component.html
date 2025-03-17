@@ -1,0 +1,36 @@
+<div class="app-container">
+  <mat-toolbar color="primary" class="mat-elevation-z6">
+    <button mat-icon-button [routerLink]="['/lists']" aria-label="Home">
+      <mat-icon>home</mat-icon>
+    </button>
+    <span>{{ title }}</span>
+    <span class="flex-spacer"></span>
+    
+    <!-- Chat toggle button -->
+    <button mat-icon-button (click)="toggleChatSidebar()" aria-label="Toggle chat">
+      <mat-icon>chat</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="content-with-sidebar">
+    <!-- Main sidenav container with chat sidebar -->
+    <mat-sidenav-container class="sidenav-container">
+      <!-- Main content -->
+      <mat-sidenav-content>
+        <main class="content">
+          <router-outlet></router-outlet>
+        </main>
+      </mat-sidenav-content>
+      
+      <!-- Chat sidebar -->
+      <mat-sidenav 
+          #chatSidenav 
+          position="end" 
+          [opened]="showChatSidebar()" 
+          [mode]="'side'" 
+          class="chat-sidebar">
+        <app-chat-sidebar></app-chat-sidebar>
+      </mat-sidenav>
+    </mat-sidenav-container>
+  </div>
+</div>

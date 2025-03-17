@@ -1,0 +1,35 @@
+.chat-input-container {
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.chat-input-field {
+  flex: 1;
+  margin-right: 16px;
+  
+  ::ng-deep .mat-mdc-form-field-flex {
+    align-items: flex-end;
+  }
+  
+  ::ng-deep .mat-mdc-form-field-infix {
+    padding-top: 10px;
+  }
+  
+  ::ng-deep textarea {
+    max-height: 100px;
+    resize: none;
+  }
+}
+
+.send-button {
+  margin-bottom: 10px;
+}
+
+// Ensure the mat-hint displays properly
+::ng-deep .mat-mdc-form-field-hint-wrapper {
+  padding-left: 0;
+  padding-right: 0;
+}

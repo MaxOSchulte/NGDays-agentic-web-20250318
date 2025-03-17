@@ -1,0 +1,54 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.flex-spacer {
+  flex: 1 1 auto;
+}
+
+.content-with-sidebar {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.sidenav-container {
+  flex: 1;
+  height: 100%;
+}
+
+.chat-sidebar {
+  width: 350px;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  position: relative;
+}
+
+button[mat-icon-button] {
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-sidebar {
+    width: 280px;
+  }
+}
+
+@media (max-width: 599px) {
+  .content {
+    padding: 8px;
+  }
+}
