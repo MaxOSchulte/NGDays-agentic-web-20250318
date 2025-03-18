@@ -9,8 +9,8 @@ export const AiConfigurations = {
 
   OpenRouter: {
     temperature: 0,
-    baseURL: 'http://localhost:4200/openaiAutomation',
-    model: 'gpt-4o-mini',
+    baseURL: 'http://localhost:4200/openRouterAutomation',
+    model: 'openai/gpt-4o-mini',
   } as AiBackendConfig,
 
   Ollama: {
