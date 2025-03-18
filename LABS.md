@@ -1,5 +1,3 @@
-Shared Whiteboard 18.03.2025 https://shorturl.at/OpizC
-
 1. Replace the `OPENROUTER_API_KEY` in `.env` with an actual key.
 2. Run `npm run start` to Start the app and a proxy for handling the API calls.
 

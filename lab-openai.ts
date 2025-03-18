@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
 import { OpenAI } from 'openai';
+import { z } from 'zod';
+import zodToJsonSchema from 'zod-to-json-schema';
 import { AiConfigurations } from './projects/ai-tooling/src/lib/ai.config';
 
 // Load environment variables from .env file if it exists
@@ -32,12 +34,40 @@ async function testChatCompletion() {
     const response = await openai.chat.completions.create({
       model: AiConfigurations.OpenRouter.model,
       messages: [
-        { role: 'system', content: 'You are an angry unhelful assistent' },
-        { role: 'user', content: 'How is the weather on the moon?' },
+        {
+          role: 'system',
+          content: 'You are an angry assistent.',
+        },
+        {
+          role: 'user',
+          content: 'How is the weather in NY in celcius?',
+        },
       ],
       temperature: 0,
-      tools: [],
+      tools: [
+        {
+          type: 'function',
+          function: {
+            name: 'get_weather',
+            description: 'Determine weather in my location',
+            strict: true,
+            parameters: zodToJsonSchema(
+              z.object({ location: z.string().describe('weather location') }),
+            ),
+          },
+        },
+      ],
     });
+
+    function test({ location }: { location: string }): void {
+      console.log('HI!!!!!');
+    }
+
+    test(
+      JSON.parse(
+        response.choices[0].message.tool_calls?.[0].function.arguments ?? '{}',
+      ),
+    );
 
     console.log('✅ Chat Completion Response:');
     console.log('Model used:', response.model);

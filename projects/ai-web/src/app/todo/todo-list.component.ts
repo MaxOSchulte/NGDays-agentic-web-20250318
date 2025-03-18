@@ -1,10 +1,29 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  input,
+  Output,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { z } from 'zod';
+import {
+  AiTool,
+  registerInstance,
+} from '../../../../ai-tooling/src/public-api';
 import { Todo } from './todo.model';
+
+const TodoIdSchema = z
+  .object({
+    todoListItemId: z.string().describe('Item id of a todo list item'),
+  })
+  .describe('Used to interact with todo list items by id');
+
+type TodoId = z.infer<typeof TodoIdSchema>;
 
 @Component({
   selector: 'app-todo-list',
@@ -18,7 +37,7 @@ import { Todo } from './todo.model';
   ],
   template: `
     <mat-list>
-      @for (todo of todos; track todo.id) {
+      @for (todo of todos(); track todo.id) {
         <mat-list-item>
           <mat-checkbox
             [checked]="todo.completed"
@@ -57,7 +76,24 @@ import { Todo } from './todo.model';
   `,
 })
 export class TodoListComponent {
-  @Input() todos: Todo[] = [];
+  todos = input<Todo[]>([]);
+
   @Output() toggle = new EventEmitter<string>();
   @Output() delete = new EventEmitter<string>();
+
+  constructor() {
+    registerInstance({
+      className: TodoListComponent.name,
+      instance: this,
+      state: computed(() => 'TODO LIST ITEMS: ' + JSON.stringify(this.todos())),
+    });
+  }
+
+  @AiTool({
+    description: 'Toggle completion state of todo list item by item id',
+    parameters: TodoIdSchema,
+  })
+  toggleTodoItem({ todoListItemId }: TodoId): void {
+    this.toggle.emit(todoListItemId);
+  }
 }
