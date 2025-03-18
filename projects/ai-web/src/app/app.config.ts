@@ -10,7 +10,7 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: AI_BACKEND_CONFIG, useValue: AiConfigurations.OpenAi },
+    { provide: AI_BACKEND_CONFIG, useValue: AiConfigurations.OpenRouter },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimations(),
