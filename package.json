@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config=proxy.conf.mjs",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:openai": "tsx openai-api-test.ts"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +21,9 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@types/dotenv": "^6.1.1",
+    "@types/node": "^22.13.10",
+    "dotenv": "^16.4.7",
     "openai": "^4.87.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -39,6 +43,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^19.2.0",
+    "tsx": "^4.19.3",
     "typescript": "~5.7.2"
   }
 }

@@ -10,7 +10,7 @@ import zodToJsonSchema from 'zod-to-json-schema';
 import { AiToolOptions } from './ai-tool.decorator';
 
 export const AI_BACKEND_CONFIG = new InjectionToken<AiBackendConfig>(
-  'to configure an ai backend.',
+  'to configure an ai backend.'
 );
 
 export interface AiBackendConfig {
@@ -53,7 +53,7 @@ export function splitFunctionName(name: string): {
  */
 export function mergeFunctionName(
   className: string,
-  functionName: string | number,
+  functionName: string | number
 ): string {
   return `${className}___${functionName}`;
 }
@@ -71,6 +71,7 @@ export class AiBackendService {
   private openai = new OpenAI({
     apiKey: this.config?.apiKey ?? 'CHANGE API KEY',
     dangerouslyAllowBrowser: true, // Only use this in a secure environment
+    baseURL: this.config?.baseURL,
   });
 
   /**
@@ -84,7 +85,7 @@ export class AiBackendService {
   async prompt(
     request: FunctionCallRequest,
     model?: string,
-    temperature?: number,
+    temperature?: number
   ): Promise<ChatCompletion.Choice[]> {
     const params: ChatCompletionCreateParams = {
       model: model ?? this.config?.model ?? 'gpt-4o-mini',
@@ -114,7 +115,7 @@ export class AiBackendService {
    */
   async executeToolCall(
     toolCall: OpenAI.ChatCompletionMessageToolCall,
-    availableTools: Record<string, (args: any) => any>,
+    availableTools: Record<string, (args: any) => any>
   ): Promise<{
     toolCall: OpenAI.ChatCompletionMessageToolCall;
     result: any;
@@ -151,14 +152,14 @@ export class AiBackendService {
 
     // Get all function properties
     const propertyNames = Object.getOwnPropertyNames(
-      Object.getPrototypeOf(instance),
+      Object.getPrototypeOf(instance)
     );
     const className = instance.constructor.name;
 
     for (const prop of propertyNames) {
       const descriptor = Object.getOwnPropertyDescriptor(
         Object.getPrototypeOf(instance),
-        prop,
+        prop
       );
 
       // Skip if not a function or if it's the constructor

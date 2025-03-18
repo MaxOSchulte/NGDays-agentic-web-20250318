@@ -92,6 +92,49 @@ clickOn({ targetId }: ClickTarget): void {
 }
 ```
 
+### OpenAI API Test Script
+
+The project includes a TypeScript script for testing the OpenAI API. This script is useful for:
+
+- Testing your OpenAI API key and connectivity
+- Exploring different API endpoints (Chat Completions, Assistants, Image Generation)
+- Comparing response times and token usage between different models
+- Understanding streaming responses
+
+#### Usage
+
+1. Create a `.env` file from the provided template:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Add your OpenAI API key to the `.env` file:
+
+   ```
+   OPENAI_API_KEY=your-api-key-here
+   ```
+
+3. Run the test script using one of these methods:
+
+   ```bash
+   # Using the npm script (recommended)
+   npm run test:openai
+
+   # Or directly with tsx
+   npx tsx openai-api-test.ts
+   ```
+
+#### Features
+
+The script tests several OpenAI API endpoints:
+
+- **Chat Completions**: Basic question answering
+- **Streaming**: Real-time response streaming
+- **Assistants API**: Creating and using assistants (optional)
+
+You can enable/disable specific tests by modifying the flags in the `runTests()` function.
+
 ## Teaching Focus
 
 This project is designed as a teaching tool to demonstrate:
