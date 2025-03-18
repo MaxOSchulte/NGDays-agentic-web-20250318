@@ -13,32 +13,35 @@ You can test your code by running `npm run lab:openai`;
 Use this function with tool calling
 
 ````Typescript
-{
-  "name": "get_weather",
-  "description": "Determine weather in my location",
-  "strict": true,
-  "parameters": {
-    "type": "object",
-    "properties": {
-      "location": {
-        "type": "string",
-        "description": "The city and state e.g. San Francisco, CA"
+  { type: 'function',
+    function: {
+    "name": "get_weather",
+    "description": "Determine weather in my location",
+    "strict": true,
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "The city and state e.g. San Francisco, CA"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "c",
+            "f"
+          ]
+        }
       },
-      "unit": {
-        "type": "string",
-        "enum": [
-          "c",
-          "f"
-        ]
-      }
-    },
-    "additionalProperties": false,
-    "required": [
-      "location",
-      "unit"
-    ]
+      "additionalProperties": false,
+      "required": [
+        "location",
+        "unit"
+      ]
+    }
   }
 }
+
 ```
 
 # Lab 3 - Using Zod
