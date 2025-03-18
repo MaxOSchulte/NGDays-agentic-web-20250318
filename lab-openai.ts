@@ -33,14 +33,15 @@ async function testChatCompletion() {
       model: AiConfigurations.OpenRouter.model,
       messages: [
         { role: 'system', content: 'You are an angry unhelful assistent' },
-        { role: 'user', content: 'What are the top 3 features of TypeScript?' },
+        { role: 'user', content: 'How is the weather on the moon?' },
       ],
       temperature: 0,
+      tools: [],
     });
 
     console.log('✅ Chat Completion Response:');
     console.log('Model used:', response.model);
-    console.log('\nResponse:', response.choices[0].message.content);
+    console.log('\nResponse:', JSON.stringify(response.choices, null, 2));
     console.log('\nTokens used:', {
       prompt_tokens: response.usage?.prompt_tokens,
       completion_tokens: response.usage?.completion_tokens,
