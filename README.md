@@ -1,59 +1,112 @@
-# AiAgentDemo
+# AI Agent Demo
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.3.
+This project demonstrates how to build AI-enhanced applications using Angular, with a focus on agentic AI capabilities for teaching purposes.
 
-## Development server
+## Overview
 
-To start a local development server, run:
+AI Agent Demo showcases practical implementations of AI agents within web applications, combining modern Angular architecture with powerful AI services. This project serves as a learning resource to understand how AI can enhance user interfaces and application functionality through directives, services, and reactive patterns.
+
+## Disclaimer
+
+**Note:** Parts of the ai-web application in this project were generated using generative AI tools. This approach demonstrates how AI can be leveraged not only as a feature within applications but also as a development accelerator in the creation process itself.
+
+## Project Structure
+
+The project consists of two main parts:
+
+1. **AI Tooling Library** (`projects/ai-tooling`): Reusable components for AI integration
+2. **AI Web Application** (`projects/ai-web`): Demo application showcasing the AI capabilities
+
+## Key AI Features
+
+### Agentic AI Capabilities
+
+This demo implements several agentic AI patterns that allow the AI to:
+
+- **Understand Context**: By analyzing user behavior and application state
+- **Take Actions**: By triggering functions or suggesting next steps
+- **Learn From Interactions**: By storing and retrieving interaction patterns
+
+### AI Service Architecture
+
+The core `AiService` provides a foundation for AI capabilities with:
+
+- Configurable AI endpoints
+- Request/response management
+- Context handling
+- Function calling capabilities
+
+### UI Integration
+
+The project demonstrates practical implementations of:
+
+- **AI-powered click directives**: Enhance elements with intelligent behavior
+- **AI-assisted scrolling**: Provide context-aware scrolling recommendations
+- **Conversational UI**: A fully-functional chat interface with the AI agent
+
+### Todo Application with AI Features
+
+The Todo application showcases:
+
+- AI-assisted task creation
+- Smart categorization of tasks
+- Contextual recommendations based on user patterns
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Angular CLI (v19 or higher)
+
+### Installation
 
 ```bash
+# Install dependencies
+npm install
+
+# Start the development server
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### AI Tooling Library
 
-## Code scaffolding
+The `ai-tooling` library provides core services and directives:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `AiService`: Core service for AI communications
+- `AiBackendService`: Handles API requests to the AI provider
+- `AiClickDirective`: Adds AI-powered click behavior
+- `AiScrollDirective`: Implements smart scrolling with AI assistance
 
-```bash
-ng generate component component-name
+### Working with AI Tools
+
+You can create custom AI tools using the `@AiTool` decorator:
+
+```typescript
+@AiTool({
+  description: 'Clicks on a designated target element',
+  parameters: TargetSchema, // Zod schema defining the expected parameters
+})
+clickOn({ targetId }: ClickTarget): void {
+  // Implementation to trigger a click on the target element
+}
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Teaching Focus
 
-```bash
-ng generate --help
-```
+This project is designed as a teaching tool to demonstrate:
 
-## Building
+2. **Agentic AI Design Patterns** in real-world applications
+3. **Practical Implementation** of AI-enhanced UI components
+4. **Responsible AI Development** with appropriate user controls
 
-To build the project run:
+## Key Concepts
 
-```bash
-ng build
-```
+- **AI Agents**: Software entities that observe, decide, and act autonomously
+- **Tool-Using AI**: AI systems that can leverage defined functions to accomplish tasks
+- **Context-Aware Assistance**: AI that understands application state to provide relevant help
+- **Reactive AI**: AI capabilities that adapt to changing user and application conditions
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## License
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT
