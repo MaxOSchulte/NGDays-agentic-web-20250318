@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  padding: 16px;
+}
+
+// Header
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.detail-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+// Add item section
+.add-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 600px;
+  margin-bottom: 24px;
+}
+
+.add-field {
+  flex: 1;
+}
+
+// Completed item styling
+.completed {
+  text-decoration: line-through;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Empty state
+.empty-state,
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: var(--mat-sys-on-surface-variant);
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.empty-heading {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+}
+
+.empty-subtext {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant);
+}

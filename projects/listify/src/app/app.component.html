@@ -1,0 +1,60 @@
+@if (layoutService.isMobile()) {
+  <!-- Mobile layout -->
+  <app-toolbar [title]="pageTitle()" />
+  <main class="mobile-content" #mainContent tabindex="-1">
+    <router-outlet />
+  </main>
+  <app-bottom-nav />
+} @else {
+  <!-- Desktop layout -->
+  <mat-sidenav-container class="desktop-container">
+    <mat-sidenav
+      #sidenav
+      mode="side"
+      [opened]="sidebarOpen()"
+      role="navigation"
+      class="app-sidenav"
+    >
+      <app-sidebar (toggleSidebar)="toggleSidebar()" />
+    </mat-sidenav>
+    <mat-sidenav
+      position="end"
+      mode="side"
+      [opened]="chatSidebarOpen()"
+      (closedStart)="chatSidebarOpen.set(false)"
+      role="complementary"
+      aria-label="AI Chat"
+      class="chat-sidenav"
+    >
+      <div class="chat-sidenav-header">
+        <button mat-icon-button (click)="toggleChatSidebar()" aria-label="Close chat sidebar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <app-chat />
+    </mat-sidenav>
+    <mat-sidenav-content role="main" #mainContent tabindex="-1">
+      @if (!sidebarOpen()) {
+        <button
+          mat-icon-button
+          class="sidebar-reopen-btn"
+          (click)="toggleSidebar()"
+          aria-label="Open sidebar"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      @if (!chatSidebarOpen()) {
+        <button
+          mat-icon-button
+          class="chat-toggle-btn"
+          (click)="toggleChatSidebar()"
+          aria-label="Open chat sidebar"
+        >
+          <mat-icon>chat</mat-icon>
+        </button>
+      }
+      <router-outlet />
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+}

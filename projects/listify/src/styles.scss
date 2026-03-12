@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$violet-palette,
+        theme-type: light,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* mat-sidenav wraps projected content in .mat-drawer-inner-container.
+   Make it a flex column so children (header + app-chat) share the height. */
+.chat-sidenav .mat-drawer-inner-container {
+  display: flex;
+  flex-direction: column;
+}

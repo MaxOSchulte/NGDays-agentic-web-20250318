@@ -1,0 +1,18 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <span class="chat-title">Chat</span>
+    <button
+      mat-icon-button
+      aria-label="Clear chat"
+      [disabled]="!chatService.hasMessages() || chatService.isProcessing()"
+      (click)="onClear()"
+    >
+      <mat-icon>delete_sweep</mat-icon>
+    </button>
+  </div>
+  <app-message-list />
+  <app-chat-input
+    [disabled]="chatService.isProcessing() || confirmationService.hasPending()"
+    (messageSent)="onSend($event)"
+  />
+</div>

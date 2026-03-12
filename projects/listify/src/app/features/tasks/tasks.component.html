@@ -1,0 +1,91 @@
+<!-- Create new list -->
+<section class="create-section" role="region" aria-label="Create a new list">
+  <mat-form-field appearance="outline" class="create-field">
+    <mat-label>New list name</mat-label>
+    <input
+      matInput
+      [value]="newListName()"
+      (input)="newListName.set($any($event.target).value)"
+      (keydown.enter)="createList()"
+      placeholder="e.g. Groceries, Work Tasks…"
+      aria-label="New list name"
+    />
+  </mat-form-field>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="createList()"
+    [disabled]="!newListName().trim()"
+    aria-label="Create list"
+  >
+    <mat-icon>add</mat-icon>
+    Create
+  </button>
+</section>
+
+<!-- Empty state -->
+@if (listService.lists().length === 0) {
+  <section class="empty-state" role="status" aria-label="No lists">
+    <mat-icon class="empty-icon">checklist</mat-icon>
+    <h2 class="empty-heading">No lists yet</h2>
+    <p class="empty-subtext">Create your first list above to get started</p>
+  </section>
+}
+
+<!-- Lists -->
+@if (listService.lists().length > 0) {
+  <mat-nav-list>
+    @for (list of listService.lists(); track list.name) {
+      @if (editingListName() === list.name) {
+        <!-- Inline edit mode -->
+        <mat-list-item class="edit-item">
+          <mat-form-field appearance="outline" class="edit-field">
+            <input
+              matInput
+              [value]="editName()"
+              (input)="editName.set($any($event.target).value)"
+              (keydown.enter)="saveEdit(list.name)"
+              (keydown.escape)="cancelEdit()"
+              aria-label="Edit list name"
+            />
+          </mat-form-field>
+          <div matListItemMeta class="edit-actions">
+            <button
+              mat-icon-button
+              (click)="saveEdit(list.name)"
+              [disabled]="!editName().trim()"
+              aria-label="Save list name"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="cancelEdit()" aria-label="Cancel editing">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      } @else {
+        <!-- Display mode -->
+        <mat-list-item (click)="openList(list.name)" class="list-item">
+          <span matListItemTitle>{{ list.name }}</span>
+          <span matListItemLine>{{ list.items.length }} items</span>
+          <div matListItemMeta class="list-actions">
+            <button
+              mat-icon-button
+              (click)="startEdit(list); $event.stopPropagation()"
+              [attr.aria-label]="'Rename ' + list.name"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              (click)="confirmDelete(list); $event.stopPropagation()"
+              [attr.aria-label]="'Delete ' + list.name"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      }
+    }
+  </mat-nav-list>
+}

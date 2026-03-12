@@ -1,0 +1,71 @@
+:host {
+  display: block;
+  padding: 16px;
+}
+
+// Create section
+.create-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 600px;
+  margin-bottom: 24px;
+}
+
+.create-field {
+  flex: 1;
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: var(--mat-sys-on-surface-variant);
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.empty-heading {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+}
+
+.empty-subtext {
+  margin: 0;
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// List items
+.list-item {
+  cursor: pointer;
+}
+
+.list-actions,
+.edit-actions {
+  display: flex;
+  gap: 4px;
+}
+
+// Inline edit
+.edit-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-field {
+  flex: 1;
+}

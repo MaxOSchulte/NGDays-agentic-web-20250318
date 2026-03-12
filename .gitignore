@@ -26,6 +26,7 @@ yarn-error.log
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/mcp.json
 .history/*
 
 # Miscellaneous
@@ -36,9 +37,21 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+__screenshots__/
+
+# Environment files
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+projects/agent-server/.venv/
+projects/agent-server/.env
 
 # System files
 .DS_Store
 Thumbs.db
-
-.env

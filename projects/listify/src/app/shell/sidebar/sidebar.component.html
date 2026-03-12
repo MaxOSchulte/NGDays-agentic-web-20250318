@@ -1,0 +1,19 @@
+<div class="sidebar-header">
+  <span class="brand">Listify</span>
+  <button mat-icon-button (click)="toggleSidebar.emit()" aria-label="Collapse sidebar">
+    <mat-icon>menu_open</mat-icon>
+  </button>
+</div>
+<mat-nav-list aria-label="Main navigation">
+  @for (item of navItems; track item.path) {
+    <a
+      mat-list-item
+      [routerLink]="item.path"
+      routerLinkActive="mdc-list-item--activated"
+      [attr.aria-label]="item.label"
+    >
+      <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+      <span matListItemTitle>{{ item.label }}</span>
+    </a>
+  }
+</mat-nav-list>

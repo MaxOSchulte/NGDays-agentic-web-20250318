@@ -1,0 +1,60 @@
+.message-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
+  padding: 16px;
+  gap: 8px;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin: 4px 0;
+
+  span {
+    flex: 1;
+  }
+}
+
+// Card alignment in message stream
+.action-card-wrapper,
+.confirm-card-wrapper,
+.preview-card-wrapper {
+  margin-right: auto;
+  padding-left: 8px;
+}
+
+.info-chip-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.streaming-content {
+  max-width: 80%;
+  padding: 12px 16px;
+  margin: 4px 0;
+  border-radius: 16px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+  margin-right: auto;
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+  border-bottom-left-radius: 4px;
+}

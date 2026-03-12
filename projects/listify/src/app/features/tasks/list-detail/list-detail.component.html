@@ -1,0 +1,85 @@
+@if (list(); as currentList) {
+  <!-- Header -->
+  <header class="detail-header">
+    <button mat-icon-button (click)="goBack()" aria-label="Back to lists overview">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="detail-title">{{ currentList.name }}</h1>
+  </header>
+
+  <!-- Add item section -->
+  <section class="add-section" role="region" aria-label="Add a new item">
+    <mat-form-field appearance="outline" class="add-field">
+      <mat-label>Add a new item</mat-label>
+      <input
+        matInput
+        [value]="newItemText()"
+        (input)="newItemText.set($any($event.target).value)"
+        (keydown.enter)="addItem()"
+        placeholder="Add a new item..."
+        aria-label="New item text"
+      />
+    </mat-form-field>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="addItem()"
+      [disabled]="!newItemText().trim()"
+      aria-label="Add item"
+    >
+      <mat-icon>add</mat-icon>
+      Add
+    </button>
+  </section>
+
+  <!-- Empty state -->
+  @if (currentList.items.length === 0) {
+    <section class="empty-state" role="status" aria-label="No items">
+      <mat-icon class="empty-icon">task_alt</mat-icon>
+      <h2 class="empty-heading">No items yet</h2>
+      <p class="empty-subtext">Add your first item above</p>
+    </section>
+  }
+
+  <!-- Items list -->
+  @if (currentList.items.length > 0) {
+    <mat-list>
+      @for (item of currentList.items; track item.text) {
+        <mat-list-item>
+          <mat-checkbox
+            matListItemIcon
+            [checked]="item.completed"
+            (change)="toggleItem(item.text)"
+            [attr.aria-label]="
+              'Mark ' + item.text + (item.completed ? ' as incomplete' : ' as complete')
+            "
+          ></mat-checkbox>
+          <span matListItemTitle [class.completed]="item.completed">{{ item.text }}</span>
+          <button
+            mat-icon-button
+            matListItemMeta
+            (click)="confirmDeleteItem(item)"
+            [attr.aria-label]="'Delete ' + item.text"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      }
+    </mat-list>
+  }
+} @else {
+  <!-- Not found state -->
+  <section class="not-found" role="status">
+    <mat-icon class="empty-icon">error_outline</mat-icon>
+    <h2 class="empty-heading">List not found</h2>
+    <p class="empty-subtext">This list doesn't exist or has been deleted.</p>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="goBack()"
+      aria-label="Go back to lists overview"
+    >
+      Back to Lists
+    </button>
+  </section>
+}

@@ -1,0 +1,45 @@
+.confirm-card {
+  max-width: 400px;
+  border-left: 3px solid var(--mat-sys-error);
+  margin: 4px 0;
+
+  &.resolved {
+    opacity: 0.7;
+  }
+
+  .confirm-card-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px 4px;
+
+    .warning-icon {
+      color: var(--mat-sys-error);
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .confirm-summary {
+      font-size: 0.875rem;
+      line-height: 1.4;
+      color: var(--mat-sys-on-surface);
+    }
+  }
+
+  .confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 4px 12px 8px;
+  }
+
+  .confirm-result {
+    display: block;
+    padding: 4px 12px 8px;
+    font-size: 0.8rem;
+    color: var(--mat-sys-on-surface-variant);
+    padding-left: 40px;
+  }
+}

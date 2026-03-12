@@ -1,0 +1,60 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.desktop-container {
+  height: 100%;
+}
+
+.app-sidenav {
+  width: 260px;
+  background: var(--mat-sys-surface-container-low);
+}
+
+.mobile-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 80px; /* Space for fixed bottom nav */
+  background: var(--mat-sys-surface);
+
+  &:focus {
+    outline: none; /* Programmatic focus — no visible ring on main content */
+  }
+}
+
+mat-sidenav-content {
+  background: var(--mat-sys-surface);
+
+  /* Programmatic focus — no visible ring on main content container */
+  &:focus {
+    outline: none;
+  }
+}
+
+.sidebar-reopen-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+}
+
+.chat-sidenav {
+  width: 380px;
+  background: var(--mat-sys-surface-container-low);
+}
+
+.chat-sidenav-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.chat-toggle-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+}
