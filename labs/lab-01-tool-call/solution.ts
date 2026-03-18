@@ -3,8 +3,8 @@
 // =============================================================================
 
 import OpenAI from 'openai';
+import { FunctionTool } from 'openai/resources/beta/assistants.mjs';
 import { z } from 'zod';
-import { zodFunction } from 'openai/helpers/zod';
 
 // --- Configuration -----------------------------------------------------------
 const OPENROUTER_API_KEY = process.env['OPENROUTER_API_KEY'] ?? '';
@@ -29,17 +29,25 @@ const NavigateParams = z.object({
 });
 
 // Step 3 — Tools
-const tools = [
-  zodFunction({
-    name: 'get_weather',
-    parameters: GetWeatherParams,
-    description: 'Get the current weather for a given city',
-  }),
-  zodFunction({
-    name: 'navigate',
-    parameters: NavigateParams,
-    description: 'Navigate the web application to a specific page',
-  }),
+const tools: FunctionTool[] = [
+  {
+    type: 'function',
+
+    function: {
+      name: 'get_weather', description: 'get weather', strict: false, parameters: z.object().toJSONSchema()
+    }
+
+  },
+  // zodFunction({
+  //   name: 'get_weather',
+  //   parameters: GetWeatherParams,
+  //   description: 'Get the current weather for a given city',
+  // }),
+  // zodFunction({
+  //   name: 'navigate',
+  //   parameters: NavigateParams,
+  //   description: 'Navigate the web application to a specific page',
+  // }),
 ];
 
 // Step 4 — Simulate
