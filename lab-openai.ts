@@ -20,7 +20,7 @@ if (!apiKey) {
 
 // Create OpenAI client
 const openai = new OpenAI({
-  apiKey: 'REPLACE',
+  apiKey: apiKey,
   baseURL: AiConfigurations.OpenRouter.baseURL,
 });
 
